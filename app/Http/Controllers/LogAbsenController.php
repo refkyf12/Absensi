@@ -16,7 +16,7 @@ class LogAbsenController extends Controller
     public function index()
     {
         $log_absen = logAbsen::all();
-		return view('LogAbsen',['log_absen'=>$log_absen]);
+		return view('log_absen.LogAbsen',['log_absen'=>$log_absen]);
     }
 
     /**
