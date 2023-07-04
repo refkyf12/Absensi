@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('users_id');
             $table->string('nama');
-            $table->string('jam');
+            $table->date('tanggal');
+            $table->time('jam');
+            $table->string('status');
+            $table->boolean('keterlambatan');
             $table->timestamps();
         });
     }
