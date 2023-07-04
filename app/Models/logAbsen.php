@@ -12,7 +12,10 @@ class logAbsen extends Model
     protected $fillable = [
         'users_id',
         'nama',
+        'tanggal',
         'jam',
+        'status',
+        'keterlambatan',
     ];
 
     public function users(){

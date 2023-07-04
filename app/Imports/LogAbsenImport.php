@@ -14,10 +14,29 @@ class LogAbsenImport implements ToModel
     */
     public function model(array $row)
     {
+        $temp = explode(" ",$row[3]);
+        $time = strtotime($temp[0]);
+        $newformat = date('Y-m-d',$time);
+        
+        $masuk = strtotime($temp[1]);
+        $batas = "09:15:00";
+
+
+
+        if ($masuk > strtotime($batas))  {
+            $statusTerlambat = true;
+        }else{
+            $statusTerlambat = false;
+        }
+
         return new logAbsen([
             'users_id' => $row[1],
             'nama' => $row[2],
-            'jam' => $row[3],
+            'tanggal' => $newformat,
+            'jam' => $temp[1],
+            'status'=>$temp[2],
+            'keterlambatan'=> $statusTerlambat,
         ]);
     }
+
 }
