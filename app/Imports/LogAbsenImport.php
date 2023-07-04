@@ -19,11 +19,21 @@ class LogAbsenImport implements ToModel
         $newformat = date('Y-m-d',$time);
         $masuk = strtotime($temp[1]);
         $keluar = strtotime($row[3]);
-        $total = (strtotime($row[3]) - strtotime($temp[1])) / 3600;
+        $total = (strtotime($row[3]) - strtotime($temp[1]));
         //coba
-        $totaljam = $total*3600/3600;
-        $totalmenit = (($total*3600)%3600)/60;
-        $totalWaktu = (int)$totaljam." Jam ".(int)$totalmenit." Menit";
+        $totaljam = $total/3600;
+        $totaljam = (int)$totaljam;
+        $totalmenit = ($total%3600)/60;
+
+        if ($totaljam / 10 < 1){
+            $totaljam = "0".$totaljam;
+        }
+
+        if ($totalmenit / 10 < 1){
+            $totalmenit = "0".$totalmenit;
+        }
+
+        $totalWaktu = $totaljam.":".$totalmenit;
         //---
         $batas = "09:00:00";
         if ($masuk > strtotime($batas))  {

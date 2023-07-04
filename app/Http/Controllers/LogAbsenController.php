@@ -87,7 +87,7 @@ class LogAbsenController extends Controller
 		Excel::import(new LogAbsenImport, public_path('/file_log_absen/'.$nama_file));
  
 		// notifikasi dengan session
-		Session::flash('sukses','Data Siswa Berhasil Diimport!');
+		Session::flash('sukses','Data Absen Berhasil Diimport!');
  
 		// alihkan halaman kembali
 		return redirect('/log_absen');
