@@ -14,15 +14,18 @@ class LogAbsenImport implements ToModel
     */
     public function model(array $row)
     {
-        $temp = explode(" ",$row[3]);
+        $temp = explode(" ",$row[2]);
         $time = strtotime($temp[0]);
         $newformat = date('Y-m-d',$time);
-        
         $masuk = strtotime($temp[1]);
-        $batas = "09:15:00";
-
-
-
+        $keluar = strtotime($row[3]);
+        $total = (strtotime($row[3]) - strtotime($temp[1])) / 3600;
+        //coba
+        $totaljam = $total*3600/3600;
+        $totalmenit = (($total*3600)%3600)/60;
+        $totalWaktu = (int)$totaljam." Jam ".(int)$totalmenit." Menit";
+        //---
+        $batas = "09:00:00";
         if ($masuk > strtotime($batas))  {
             $statusTerlambat = true;
         }else{
@@ -30,11 +33,12 @@ class LogAbsenImport implements ToModel
         }
 
         return new logAbsen([
-            'users_id' => $row[1],
-            'nama' => $row[2],
+            'users_id' => $row[0],
+            'nama' => $row[1],
             'tanggal' => $newformat,
-            'jam' => $temp[1],
-            'status'=>$temp[2],
+            'jam_masuk' => $temp[1],
+            'jam_keluar' => $row[3],
+            'total_jam' => $totalWaktu,
             'keterlambatan'=> $statusTerlambat,
         ]);
     }

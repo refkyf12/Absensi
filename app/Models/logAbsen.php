@@ -13,8 +13,9 @@ class logAbsen extends Model
         'users_id',
         'nama',
         'tanggal',
-        'jam',
-        'status',
+        'jam_masuk',
+        'jam_keluar',
+        'total_jam',
         'keterlambatan',
     ];
 

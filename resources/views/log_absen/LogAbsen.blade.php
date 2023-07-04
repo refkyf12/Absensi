@@ -72,7 +72,11 @@
                             <th>No</th>
                             <th>User ID</th>
                             <th>Nama</th>
-                            <th>Jam</th>
+							<th>Tanggal</th>
+                            <th>Jam Masuk</th>
+							<th>Jam Keluar</th>
+							<th>Total Jam Kerja</th>
+							<th>Keterlambatan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,7 +86,16 @@
                             <td>{{ $i++ }}</td>
                             <td>{{$data->users_id}}</td>
                             <td>{{$data->nama}}</td>
-                            <td>{{$data->jam}}</td>
+							<td>{{$data->tanggal}}</td>
+                            <td>{{$data->jam_masuk}}</td>
+							<td>{{$data->jam_keluar}}</td>
+							<td>{{$data->total_jam}}</td>
+							@if($data->keterlambatan == true)
+							<td>Terlambat</td>
+							@endif
+							@if($data->keterlambatan == false)
+							<td>Tepat Waktu</td>
+							@endif
                         </tr>
                         @endforeach
                     </tbody>
