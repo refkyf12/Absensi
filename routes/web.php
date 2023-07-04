@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LogAbsenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/log_absen', 'App\Http\Controllers\LogAbsenController@index');
+Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
