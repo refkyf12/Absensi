@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 
 class UserController extends Controller
 {
@@ -55,7 +57,13 @@ class UserController extends Controller
 
     public function index()
     {
-        //
+        $karyawan = User -> get();
+        if(request()-> segment(1) == 'api') return response()->json([
+            "error"=>false,
+            "list"=>$karyawan,
+        ]);
+
+        return view('karyawan.index', ['data' => $karyawan]);
     }
 
     /**
@@ -63,7 +71,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('karyawan.form_add_account', [
+            'title' => 'Tambah Karyawan',
+            'method' => 'POST',
+            'action' => 'karyawan'
+        ]); 
     }
 
     /**
@@ -71,38 +83,62 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $karyawan = new User;
+        $karyawan->nama = $request->nama;
+        $karyawan->email = $request->email;
+        $pass_crypt = bcrypt($request->password);
+        $karyawan->password = $pass_crypt;
+
+        $karyawan->save();
+        return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Users $users)
+    public function show($users_id)
     {
-        //
+        $data = User::find($users_id);
+        return view('karyawan.form_edit_account', compact('data'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Users $users)
+    public function edit($users_id)
     {
-        //
+        $dt = User::find($users_id);
+    	$title = "Edit Karyawan $dt->nama";
+
+    	return view('karyawan.edit',compact('dt'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Users $users)
+    public function update(Request $request, int $users_id)
     {
-        //
+        $data = User::find($users_id);
+        if ($request->password != ""){
+            $data->nama = $request->nama;
+            $data->email = $request->email;
+            $pass_crypt = bcrypt($request->password);
+            $data->password = $pass_crypt;
+            $data->update();
+            return redirect('/karyawan')->with('msg', 'Akun berhasil diperbarui');
+        } else {
+            $users_id = optional(Auth::user())->users_id;
+            return Redirect::back()->withErrors(['msg' => 'Password harus diisi']);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Users $users)
+    public function delete($users_id)
     {
-        //
+        $data = User::find($users_id);
+        $data -> delete();
+        return redirect('/karyawan')->with('msg', 'Data Berhasil di Hapus');
     }
 }
