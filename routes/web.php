@@ -26,3 +26,9 @@ Route::post('/authenticate', 'App\Http\Controllers\UserController@login');
 Route::get('/logout', 'App\Http\Controllers\UserController@logout');
 Route::get('/log_absen', 'App\Http\Controllers\LogAbsenController@index');
 Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
+
+Route::get('/karyawan', 'use App\Http\Controllers\UserController@index');
+Route::resource('/karyawan', UserController::class);
+Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
+Route::get('/karyawan/{id}', [UserController::class], 'show')->name('show');
+Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
