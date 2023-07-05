@@ -11,6 +11,7 @@ class logAbsen extends Model
     protected $table = 'log_absen';
 
     protected $fillable = [
+        'id',
         'users_id',
         'tanggal',
         'jam_masuk',
@@ -21,5 +22,9 @@ class logAbsen extends Model
 
     public function users(){
         return $this->belongsTo(User::class);
+    }
+
+    public function lembur(){
+        return $this->hasMany(Lembur::class);
     }
 }

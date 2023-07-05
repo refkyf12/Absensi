@@ -14,13 +14,16 @@ class Lembur extends Model
 
     protected $fillable = [
         'users_id',
-        'tanggal',
-        'jam_keluar',
+        'absen_id',
         'total_jam',
         'disetujui',
     ];
 
     public function users(){
         return $this->belongsTo(User::class);
+    }
+
+    public function log_absen(){
+        return $this->belongsTo(logAbsen::class);
     }
 }

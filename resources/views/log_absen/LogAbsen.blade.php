@@ -1,82 +1,65 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.master')
 
-<head>
-    <title>Log Absen</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+@section('content')
 
-<body>
-    @include('layouts.header')
+<div class="row">
+    <div class="col-md-12">
+        <h4>Log Absen</h4>
+        {{-- notifikasi form validasi --}}
+        @if ($errors->has('file'))
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $errors->first('file') }}</strong>
+        </span>
+        @endif
 
-    <div class="content">
-        @include('layouts.sidebar')
-
-        <main class="main">
-            <div class="container">
-                <center>
-                    <h4>Log Absen</h4>
-                </center>
-
-                {{-- notifikasi form validasi --}}
-                @if ($errors->has('file'))
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $errors->first('file') }}</strong>
-                </span>
-                @endif
-
-                {{-- notifikasi sukses --}}
-                @if ($sukses = Session::get('sukses'))
-                <div class="alert alert-success alert-block">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>{{ $sukses }}</strong>
-                </div>
-                @endif
-
-                <button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#importExcel">
-                    IMPORT EXCEL
-                </button>
-
-                <!-- Import Excel -->
-                <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Import Excel</h5>
-                                </div>
-                                <div class="modal-body">
-
-                                    {{ csrf_field() }}
-
-                                    <label>Pilih file excel</label>
-                                    <div class="form-group">
-                                        <input type="file" name="file" required="required">
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Import</button>
-                                </div>
+        {{-- notifikasi sukses --}}
+        @if ($sukses = Session::get('sukses'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ $sukses }}</strong>
+        </div>
+        @endif
+        <div class="box box-warning">
+            <div class="box-header">
+                <div class="modal-dialog" role="document">
+                    <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Import Excel</h5>
                             </div>
-                        </form>
-                    </div>
-                </div>
+                            <div class="modal-body">
 
-                <table class='table table-bordered'>
+                                {{ csrf_field() }}
+
+                                <label>Pilih file excel</label>
+                                <div class="form-group">
+                                    <input type="file" name="file" required="required">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Import</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+
+            <div class="table-responsive">
+                <table class="table table-hover myTable">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>User ID</th>
                             <th>Nama</th>
-							<th>Tanggal</th>
+                            <th>Tanggal</th>
                             <th>Jam Masuk</th>
-							<th>Jam Keluar</th>
-							<th>Total Jam Kerja</th>
-							<th>Keterlambatan</th>
+                            <th>Jam Keluar</th>
+                            <th>Total Jam Kerja</th>
+                            <th>Keterlambatan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,41 +68,45 @@
                             <td>{{ $e+1 }}</td>
                             <td>{{$dt->users_id}}</td>
                             <td>
-                                    @if ($dt->id)
-                                        {{$dt->users->nama}}
-                                    @endif
+                                @if ($dt->id)
+                                {{$dt->users->nama}}
+                                @endif
                             </td>
-							<td>{{$dt->tanggal}}</td>
+                            <td>{{$dt->tanggal}}</td>
                             <td>{{$dt->jam_masuk}}</td>
-							<td>{{$dt->jam_keluar}}</td>
-							<td>{{$dt->total_jam}}</td>
-							@if($dt->keterlambatan == true)
-							<td>Terlambat</td>
-							@endif
-							@if($dt->keterlambatan == false)
-							<td>Tepat Waktu</td>
-							@endif
+                            <td>{{$dt->jam_keluar}}</td>
+                            <td>{{$dt->total_jam}}</td>
+                            @if($dt->keterlambatan == true)
+                            <td>Terlambat</td>
+                            @endif
+                            @if($dt->keterlambatan == false)
+                            <td>Tepat Waktu</td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            @yield('content')
-        </main>
+
+        </div>
     </div>
+</div>
+</div>
 
+@endsection
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+@section('scripts')
 
-</body>
+<script type="text/javascript">
+    $(document).ready(function () {
 
-</html>
-</form>
+        // btn refresh
+        $('.btn-refresh').click(function (e) {
+            e.preventDefault();
+            $('.preloader').fadeIn();
+            location.reload();
+        })
+
+    })
+
+</script>

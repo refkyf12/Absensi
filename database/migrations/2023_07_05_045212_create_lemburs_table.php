@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users');
-            $table->date('tanggal');
-            $table->time('jam_keluar');
+            $table->unsignedBigInteger('absen_id');
+            $table->foreign('absen_id')->references('id')->on('log_absen');
             $table->string('total_jam');
             $table->boolean('disetujui');
             $table->timestamps();

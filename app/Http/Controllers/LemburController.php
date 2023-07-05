@@ -12,7 +12,8 @@ class LemburController extends Controller
      */
     public function index()
     {
-        //
+        $lembur = Lembur::orderBy('total_jam')->get();
+		return view('lembur.index',['data'=>$lembur]);
     }
 
     /**

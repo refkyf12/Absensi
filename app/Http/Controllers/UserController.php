@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
@@ -49,7 +50,7 @@ class UserController extends Controller
     }
     
     public function logout() {
-        Session::flush();
+        \Session::flush();
         Auth::logout();
   
         return Redirect('login');
