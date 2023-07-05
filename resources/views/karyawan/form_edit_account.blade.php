@@ -17,7 +17,7 @@
                     class="border"
                     style="padding: 20px"
                     method="POST"
-                    action="/update/{{ $data->users_id }}"
+                    action="/update/{{ $data->id }}"
                 >
                     @csrf
                     <input type="hidden"/>
@@ -25,18 +25,18 @@
                         <label>NIP</label>
                         <input
                             type="string"
-                            name="users_id"
+                            name="id"
                             class="form-control"
-                            value="{{ $data->users_id }}"
+                            value="{{ $data->id }}"
                         />
                     </div>
                     <div class="form-group">
                         <label>Nama</label>
                         <input
                             type="string"
-                            name="name"
+                            name="nama"
                             class="form-control"
-                            value="{{ $data->name}}"
+                            value="{{ $data->nama}}"
                         />
                     </div>
                     <div class="form-group">
@@ -54,7 +54,7 @@
                             type="password"
                             name="password"
                             class="form-control"
-                            value="{{ $data->email }}"
+                            value="{{ $data->password }}"
                         />
                     </div>
                     @if($errors->any())
