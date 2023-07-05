@@ -44,7 +44,6 @@ class LogAbsenImport implements ToModel
 
         return new logAbsen([
             'users_id' => $row[0],
-            'nama' => $row[1],
             'tanggal' => $newformat,
             'jam_masuk' => $temp[1],
             'jam_keluar' => $row[3],

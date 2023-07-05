@@ -80,20 +80,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php $i=1 @endphp
-                        @foreach($log_absen as $data)
+                        @foreach($data as $e=>$dt)
                         <tr>
-                            <td>{{ $i++ }}</td>
-                            <td>{{$data->users_id}}</td>
-                            <td>{{$data->nama}}</td>
-							<td>{{$data->tanggal}}</td>
-                            <td>{{$data->jam_masuk}}</td>
-							<td>{{$data->jam_keluar}}</td>
-							<td>{{$data->total_jam}}</td>
-							@if($data->keterlambatan == true)
+                            <td>{{ $e+1 }}</td>
+                            <td>{{$dt->users_id}}</td>
+                            <td>
+                                    @if ($dt->id)
+                                        {{$dt->users->nama}}
+                                    @endif
+                            </td>
+							<td>{{$dt->tanggal}}</td>
+                            <td>{{$dt->jam_masuk}}</td>
+							<td>{{$dt->jam_keluar}}</td>
+							<td>{{$dt->total_jam}}</td>
+							@if($dt->keterlambatan == true)
 							<td>Terlambat</td>
 							@endif
-							@if($data->keterlambatan == false)
+							@if($dt->keterlambatan == false)
 							<td>Tepat Waktu</td>
 							@endif
                         </tr>

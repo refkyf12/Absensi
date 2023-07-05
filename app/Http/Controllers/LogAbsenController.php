@@ -15,8 +15,8 @@ class LogAbsenController extends Controller
      */
     public function index()
     {
-        $log_absen = logAbsen::all();
-		return view('log_absen.LogAbsen',['log_absen'=>$log_absen]);
+        $log_absen = logAbsen::orderBy('tanggal')->get();
+		return view('log_absen.LogAbsen',['data'=>$log_absen]);
     }
 
     /**

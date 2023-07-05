@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Lembur;
+use App\Models\logAbsen;
 
 class User extends Authenticatable
 {
@@ -19,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'users_id',
+        'nama',
         'email',
         'password',
     ];
@@ -44,5 +47,9 @@ class User extends Authenticatable
 
     public function log_absen(){
         return $this->hasMany(logAbsen::class);
+    }
+
+    public function lembur(){
+        return $this->hasMany(Lembur::class);
     }
 }
