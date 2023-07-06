@@ -63,4 +63,20 @@ class LemburController extends Controller
     {
         //
     }
+
+    public function setuju($id){
+        $data = Lembur::find($id);
+        $data['disetujui'] = 1;
+        $data->update();
+
+        return redirect('/lembur')->with('msg', 'data lembur berhasil diperbarui');
+    }
+
+    public function tolak($id){
+        $data = Lembur::find($id);
+        $data['disetujui'] = 2;
+        $data->update();
+
+        return redirect('/lembur')->with('msg', 'data lembur berhasil diperbarui');
+    }
 }

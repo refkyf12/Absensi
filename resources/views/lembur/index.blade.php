@@ -34,11 +34,23 @@
                                     @endif
                                 </td>
                                 <td>{{ $dt->total_jam }}</td>
-                                <td>{{ $dt->disetujui }}</td>
+                                
+                                @if ($dt->disetujui == 1)
+                                    <td>DISETUJUI</td>
+                                @endif
+
+                                @if ($dt->disetujui == 2)
+                                    <td>DITOLAK</td>
+                                @endif
+
+                                @if ($dt->disetujui == NULL)
+                                    <td>BELUM DIPROSES</td>
+                                @endif
+                                
                                 <td>
                                     <div style="width:60px">
-                                        <a href="/karyawan/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit" id="edit"><i class="fa fa-pencil-square-o"></i></a>
-                                        <button href="/delete/{{ $dt->id }} "class="btn btn-danger btn-xs btn-hapus" id="delete"><i class="fa fa-trash-o"></i></button>                                    
+                                        <a href="/lembur/setuju/{{$dt->id}}" class="btn btn-success btn-xs btn-edit" id="edit"><i class="fa fa-check"></i></a>
+                                        <a href="/lembur/tolak/{{$dt->id}}" class="btn btn-danger btn-xs btn-edit" id="tolak"><i class="fa fa-pencil-square-o"></i></a>
                                     </div>
                                 </td>
                             </tr>
