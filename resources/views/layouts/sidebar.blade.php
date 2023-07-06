@@ -9,5 +9,5 @@
         <li class="menu-sidebar"><a href="{{ url('/lembur') }}"><span class="fa fa-firefox"></span>Lembur</span></a></li>
 
 
-      </ul>
+  </ul>
     </section>
