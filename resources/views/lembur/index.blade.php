@@ -14,14 +14,14 @@
             <div class="box-body">
                
                 <div class="table-responsive">
-                    <table class="table table-hover myTable">
+                    <table class="table table-hover myTable" id="absentable">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Total Lembur</th>
                                 <th>Approval</th>
-                                <th>Action</th>
+                                <th class="not-export-col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,14 +57,11 @@
 @section('scripts')
  
 <script type="text/javascript">
-    $(document).ready(function(){
- 
         // btn refresh
         $('.btn-refresh').click(function(e){
             e.preventDefault();
             $('.preloader').fadeIn();
             location.reload();
-        })
- 
-    })
+        });
+    });
 </script>

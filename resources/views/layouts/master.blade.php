@@ -128,7 +128,10 @@
 
 <script type="text/javascript">
   $(document).ready( function () {
-    $('.myTable').DataTable();
+    $('.myTable').DataTable({
+      dom: 'Bfrtip',
+            buttons: ['csv', 'excel', 'pdf', 'print']
+    });
 
     // $('.sync-ulang').click(function(e){
     //   e.preventDefault();

@@ -22,7 +22,7 @@
                                 <th>User ID</th>
                                 <th>Nama</th>
                                 <th>Email</th>
-                                <th>Edit</th>
+                                <th class="not-export-col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
