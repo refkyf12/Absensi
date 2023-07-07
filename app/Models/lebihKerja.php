@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\logAbsen;
 
-class Lembur extends Model
+class lebihKerja extends Model
 {
     use HasFactory;
 
-    protected $table = 'lembur';
+    protected $table = 'lebih_kerja';
 
     protected $fillable = [
         'users_id',
         'absen_id',
         'total_jam',
-        'disetujui',
     ];
 
     public function users(){

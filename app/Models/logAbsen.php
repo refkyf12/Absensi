@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\lebihKerja;
 
 class logAbsen extends Model
 {
@@ -24,7 +25,7 @@ class logAbsen extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lembur(){
-        return $this->hasMany(Lembur::class);
+    public function lebihKerja(){
+        return $this->hasOne(lebihKerja::class);
     }
 }

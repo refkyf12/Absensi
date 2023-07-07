@@ -19,9 +19,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Total Lembur</th>
-                                <th>Approval</th>
-                                <th class="not-export-col">Action</th>
+                                <!-- <th>Tanggal</th> -->
+                                <th>Total Jam Lebih</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,26 +32,8 @@
                                     {{$dt->users->nama}}
                                     @endif
                                 </td>
+                                
                                 <td>{{ $dt->total_jam }}</td>
-                                
-                                @if ($dt->disetujui == 1)
-                                    <td>DISETUJUI</td>
-                                @endif
-
-                                @if ($dt->disetujui == 2)
-                                    <td>DITOLAK</td>
-                                @endif
-
-                                @if ($dt->disetujui == NULL)
-                                    <td>BELUM DIPROSES</td>
-                                @endif
-                                
-                                <td>
-                                    <div style="width:60px">
-                                        <a href="/lembur/setuju/{{$dt->id}}" class="btn btn-success btn-xs btn-edit" id="edit"><i class="fa fa-check"></i></a>
-                                        <a href="/lembur/tolak/{{$dt->id}}" class="btn btn-danger btn-xs btn-edit" id="tolak"><i class="fa fa-pencil-square-o"></i></a>
-                                    </div>
-                                </td>
                             </tr>
                             @endforeach
                         </tbody>

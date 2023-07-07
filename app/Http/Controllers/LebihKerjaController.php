@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lembur;
+use App\Models\lebihKerja;
 use Illuminate\Http\Request;
 
-class LemburController extends Controller
+class LebihKerjaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $lembur = Lembur::orderBy('total_jam')->get();
-		return view('lembur.index',['data'=>$lembur]);
+        $lebihKerja = lebihKerja::orderBy('total_jam')->get();
+		return view('lebihKerja.index',['data'=>$lebihKerja]);
     }
 
     /**
@@ -64,19 +64,4 @@ class LemburController extends Controller
         //
     }
 
-    public function setuju($id){
-        $data = Lembur::find($id);
-        $data['disetujui'] = 1;
-        $data->update();
-
-        return redirect('/lembur')->with('msg', 'data lembur berhasil diperbarui');
-    }
-
-    public function tolak($id){
-        $data = Lembur::find($id);
-        $data['disetujui'] = 2;
-        $data->update();
-
-        return redirect('/lembur')->with('msg', 'data lembur berhasil diperbarui');
-    }
 }

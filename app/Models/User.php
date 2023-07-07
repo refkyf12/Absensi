@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Lembur;
+use App\Models\lebihKerja;
 use App\Models\logAbsen;
 
 class User extends Authenticatable
@@ -49,7 +49,7 @@ class User extends Authenticatable
         return $this->hasMany(logAbsen::class);
     }
 
-    public function lembur(){
-        return $this->hasMany(Lembur::class);
+    public function lebihKerja(){
+        return $this->hasMany(lebihKerja::class);
     }
 }

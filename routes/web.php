@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogAbsenController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LemburController;
+use App\Http\Controllers\LebihKerjaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,6 @@ Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
 Route::get('/karyawan/{id}', [UserController::class], 'show')->name('show');
 Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
 
-Route::get('/lembur', 'App\Http\Controllers\LemburController@index');
-Route::get('/lembur/setuju/{id}', 'App\Http\Controllers\LemburController@setuju');
-Route::get('/lembur/tolak/{id}', 'App\Http\Controllers\LemburController@tolak');
+Route::get('/lebihKerja', 'App\Http\Controllers\LebihKerjaController@index');
+
+Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

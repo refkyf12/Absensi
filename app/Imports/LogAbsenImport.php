@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\Models\logAbsen;
-use App\Models\Lembur;
+use App\Models\lebihKerja;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
@@ -39,7 +39,7 @@ class LogAbsenImport implements ToCollection
             $totalWaktu = $totaljam.":".$totalmenit;
             //---
             $batas = "09:00:00";
-            if ($masuk > strtotime($batas))  {
+            if (strtotime($masuk) > strtotime($batas))  {
                 $statusTerlambat = true;
             }else{
                 $statusTerlambat = false;
@@ -59,27 +59,27 @@ class LogAbsenImport implements ToCollection
 
             $batasKerja = strtotime("17:00:00");
         
-            $totalLembur = $keluar-$batasKerja;
+            $totalLebih = $keluar-$batasKerja;
         
-            $totalJamLembur = $totalLembur/3600;
-            $totalJamLembur = (int)$totalJamLembur;
+            $totalJamLebih = $totalLebih/3600;
+            $totalJamLebih = (int)$totalJamLebih;
         
-            $totalMenitLembur = ($totalLembur%3600)/60;
+            $totalMenitLebih = ($totalLebih%3600)/60;
         
-            if ($totalJamLembur / 10 < 1){
-                $totalJamLembur = "0".$totalJamLembur;
+            if ($totalJamLebih / 10 < 1){
+                $totalJamLebih = "0".$totalJamLebih;
             }
         
-            if ($totalMenitLembur / 10 < 1){
-                $totalMenitLembur = "0".$totalMenitLembur;
+            if ($totalMenitLebih / 10 < 1){
+                $totalMenitLebih = "0".$totalMenitLebih;
             }
         
-            $totalLembur = $totalJamLembur.":".$totalMenitLembur;
+            $totalLebih = $totalJamLebih.":".$totalMenitLebih;
 
-            Lembur::create([
+            lebihKerja::create([
                 'users_id' => $row[1],
                 'absen_id' => $row[0],
-                'total_jam' => $totalLembur,
+                'total_jam' => $totalLebih,
             ]);
         }
         
