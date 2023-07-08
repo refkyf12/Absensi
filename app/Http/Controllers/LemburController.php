@@ -11,6 +11,7 @@ use DB;
 class LemburController extends Controller
 {
     public function index(){
+        $this->validate();
         $lembur = Lembur::with('User')->get();
         if (request()->segment(1) == 'api') return response()->json([
             "error"=>false,

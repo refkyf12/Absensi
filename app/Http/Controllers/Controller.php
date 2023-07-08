@@ -9,4 +9,10 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    public function validate(){
+        if(\Auth::user()->role == 0) {
+            return abort(404);
+        }
+    }
 }

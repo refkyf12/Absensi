@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\logAbsen;
+use App\Models\Rules;
 use Illuminate\Http\Request;
 use App\Imports\LogAbsenImport;
 use Session;
@@ -15,6 +16,7 @@ class LogAbsenController extends Controller
      */
     public function index()
     {
+        $this->validate();
         $log_absen = logAbsen::all();
 		return view('log_absen.LogAbsen',['data'=>$log_absen]);
     }
@@ -83,8 +85,11 @@ class LogAbsenController extends Controller
 		// upload ke folder file_siswa di dalam folder public
 		$file->move('file_log_absen',$nama_file);
  
-		// import data
-		Excel::import(new LogAbsenImport, public_path('/file_log_absen/'.$nama_file));
+        // import data
+        $batas = new LogAbsenImport;
+        $rules = Rules::where('key', "batas_waktu")->first(); 
+        $batas->setBatasWaktu($rules["value"]);
+		Excel::import($batas, public_path('/file_log_absen/'.$nama_file));
  
 		// notifikasi dengan session
 		Session::flash('sukses','Data Absen Berhasil Diimport!');

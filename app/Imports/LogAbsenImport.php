@@ -10,6 +10,13 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class LogAbsenImport implements ToCollection
 {
+
+    public function setBatasWaktu($batas){
+		$this->batas = $batas;
+	}
+    public function getBatasWaktu() {
+		return $this->batas; 
+	}
     /**
     * @param array $row
     *
@@ -39,15 +46,13 @@ class LogAbsenImport implements ToCollection
     
             $totalWaktu = $totaljam.":".$totalmenit;
             //---
-            $batas = "09:00:00";
+            $batas = $this->getBatasWaktu();
             if (strtotime($masuk) > strtotime($batas))  {
                 $statusTerlambat = true;
             }else{
                 $statusTerlambat = false;
             }
-    
             
-
             logAbsen::create([
                 'id' => $row[0],
                 'users_id' => $row[1],

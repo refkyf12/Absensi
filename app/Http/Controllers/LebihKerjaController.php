@@ -12,6 +12,7 @@ class LebihKerjaController extends Controller
      */
     public function index()
     {
+        $this->validate();
         $lebihKerja = lebihKerja::with('log_absen')->get();
         //dd($lebihKerja);
 		return view('lebihKerja.index',['data'=>$lebihKerja]);
