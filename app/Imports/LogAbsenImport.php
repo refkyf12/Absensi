@@ -4,11 +4,18 @@ namespace App\Imports;
 
 use App\Models\logAbsen;
 use App\Models\lebihKerja;
+use App\Models\Rules;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
 class LogAbsenImport implements ToCollection
 {
+    public function setBatasWaktu($batas){
+		$this->batas = $batas;
+	}
+    public function getBatasWaktu() {
+		return $this->batas; 
+	}
     /**
     * @param array $row
     *
@@ -45,8 +52,6 @@ class LogAbsenImport implements ToCollection
                 $statusTerlambat = false;
             }
     
-            
-
             logAbsen::create([
                 'id' => $row[0],
                 'users_id' => $row[1],

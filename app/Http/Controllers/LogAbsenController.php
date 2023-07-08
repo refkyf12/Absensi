@@ -3,20 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\logAbsen;
+use App\Models\Rules;
 use Illuminate\Http\Request;
 use App\Imports\LogAbsenImport;
+
 use Session;
+use DB;
 use Maatwebsite\Excel\Facades\Excel;
+use DataTables;
 
 class LogAbsenController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $log_absen = logAbsen::all();
-		return view('log_absen.LogAbsen',['data'=>$log_absen]);
+    public function index(Request $request)
+    {   
+        if ($request->ajax()) {
+            $data = logAbsen::all();
+
+            return  DataTables::of($data)
+                    ->addIndexColumn()
+                    ->make(true);
+        }
+            
+        return view('log_absen.LogAbsen');
     }
 
     /**
@@ -83,8 +94,11 @@ class LogAbsenController extends Controller
 		// upload ke folder file_siswa di dalam folder public
 		$file->move('file_log_absen',$nama_file);
  
-		// import data
-		Excel::import(new LogAbsenImport, public_path('/file_log_absen/'.$nama_file));
+        // import data
+        $batas = new LogAbsenImport;
+        $rules = Rules::where('key', "batas_waktu")->first(); 
+        $batas->setBatasWaktu($rules["value"]);
+		Excel::import($batas, public_path('/file_log_absen/'.$nama_file));
  
 		// notifikasi dengan session
 		Session::flash('sukses','Data Absen Berhasil Diimport!');

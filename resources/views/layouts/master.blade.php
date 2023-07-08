@@ -127,10 +127,9 @@
 @include('layouts.script')
 
 <script type="text/javascript">
-  $(document).ready( function () {
-    $('.myTable').DataTable({
-      dom: 'Bfrtip',
-            buttons: ['csv', 'excel', 'pdf', 'print']
+  
+    $(".filter").click(function(){
+        table.draw();
     });
 
     // $('.sync-ulang').click(function(e){
@@ -138,7 +137,7 @@
     //   $('#modal-sync').modal();
     // })
 
-} );
+});
 </script>
 
 @yield('scripts')

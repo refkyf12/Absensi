@@ -159,6 +159,7 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+        Yajra\DataTables\DataTablesServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
@@ -210,7 +211,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        Maatwebsite\Excel\ExcelServiceProvider::class
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
