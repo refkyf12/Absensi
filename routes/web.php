@@ -31,6 +31,7 @@ Route::post('/logout', 'App\Http\Controllers\UserController@logout');
 Route::get('/logout', 'App\Http\Controllers\UserController@logout');
 Route::get('/log_absen', 'App\Http\Controllers\LogAbsenController@index');
 Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
+Route::get('/filter','App\Http\Controllers\LogAbsenController@filter');
 
 Route::get('/karyawan', 'App\Http\Controllers\UserController@index');
 Route::resource('/karyawan', UserController::class);
@@ -47,6 +48,7 @@ Route::get('/lembur/create', 'App\Http\Controllers\LemburController@create');
 Route::post('/lembur/create', 'App\Http\Controllers\LemburController@store');
 Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
 
+// Route::resource('cuti', CutiController::class);
 Route::get('/cuti', 'App\Http\Controllers\CutiController@index');
 
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

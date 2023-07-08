@@ -92,4 +92,15 @@ class LogAbsenController extends Controller
 		// alihkan halaman kembali
 		return redirect('/log_absen');
 	}
+
+    public function filter(Request $request){
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $log_absen = logAbsen::whereDate('tanggal','>=',$start_date)->whereDate('tanggal','<=',$end_date)->get();
+
+        //dd($log_absen);
+
+        return view('log_absen.LogAbsen', ['data'=>$log_absen]);
+    }
 }
