@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\logAbsen;
 use App\Models\lebihKerja;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
@@ -60,6 +61,7 @@ class LogAbsenImport implements ToCollection
             $batasKerja = strtotime("17:00:00");
         
             $totalLebih = $keluar-$batasKerja;
+            $totalJamForLebih = $totalLebih;
         
             $totalJamLebih = $totalLebih/3600;
             $totalJamLebih = (int)$totalJamLebih;
@@ -81,6 +83,12 @@ class LogAbsenImport implements ToCollection
                 'absen_id' => $row[0],
                 'total_jam' => $totalLebih,
             ]);
+        
+
+            $newValue = $totalJamForLebih/60;
+
+            User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
+
         }
         
     }

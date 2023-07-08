@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogAbsenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LebihKerjaController;
+use App\Http\Controllers\LemburController;
+use App\Http\Controllers\CutiController;
+use App\Http\Controllers\FormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,5 +39,14 @@ Route::get('/karyawan/{id}', [UserController::class], 'show')->name('show');
 Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
 
 Route::get('/lebihKerja', 'App\Http\Controllers\LebihKerjaController@index');
+
+Route::resource('lembur', LemburController::class);
+Route::get('/lembur', 'App\Http\Controllers\LemburController@index');
+Route::get('/lembur/create', 'App\Http\Controllers\LemburController@create');
+// Route::get('/lembur/create', 'App\Http\Controllers\FormController@index');
+Route::post('/lembur/create', 'App\Http\Controllers\LemburController@store');
+Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
+
+Route::get('/cuti', 'App\Http\Controllers\CutiController@index');
 
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

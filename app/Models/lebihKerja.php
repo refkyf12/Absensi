@@ -24,6 +24,6 @@ class lebihKerja extends Model
     }
 
     public function log_absen(){
-        return $this->belongsTo(logAbsen::class);
+        return $this->belongsTo(logAbsen::class, 'absen_id');
     }
 }

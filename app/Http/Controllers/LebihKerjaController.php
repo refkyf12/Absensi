@@ -12,7 +12,8 @@ class LebihKerjaController extends Controller
      */
     public function index()
     {
-        $lebihKerja = lebihKerja::orderBy('total_jam')->get();
+        $lebihKerja = lebihKerja::with('log_absen')->get();
+        //dd($lebihKerja);
 		return view('lebihKerja.index',['data'=>$lebihKerja]);
     }
 

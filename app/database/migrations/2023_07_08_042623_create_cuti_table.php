@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lebih_kerja', function (Blueprint $table) {
+        Schema::create('cuti', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
-            $table->unsignedBigInteger('absen_id');
-            $table->foreign('absen_id')->references('id')->on('log_absen');
-            $table->string('total_jam');
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lebih_kerja');
+        Schema::dropIfExists('cuti');
     }
 };

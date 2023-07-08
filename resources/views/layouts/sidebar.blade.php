@@ -8,6 +8,8 @@
         <li class="menu-sidebar"><a href="{{ url('/karyawan') }}"><span class="fa fa-firefox"></span>Karyawan</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/log_absen') }}"><span class="fa fa-firefox"></span>Absen</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/lebihKerja') }}"><span class="fa fa-firefox"></span>Lebih Kerja</span></a></li>
+        <li class="menu-sidebar"><a href="{{ url('/lembur') }}"><span class="fa fa-firefox"></span>Lembur</span></a></li>
+        <li class="menu-sidebar"><a href="{{ url('/cuti') }}"><span class="fa fa-firefox"></span>cuti</span></a></li>
 
 
   </ul>
