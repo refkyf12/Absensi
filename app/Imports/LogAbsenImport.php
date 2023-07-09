@@ -92,7 +92,11 @@ class LogAbsenImport implements ToCollection
 
             $newValue = $totalJamForLebih/60;
 
-            User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
+            // User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
+
+            $user = User::find($row[1]);
+            $user->jam_lebih = $user->jam_lebih + $newValue;
+            $user->save();
 
         }
         

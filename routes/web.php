@@ -22,7 +22,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', 'App\Http\Controllers\UserController@dashboard'); 
+
+Route::get('/reset', 'App\Http\Controllers\UserController@reset'); 
 Route::get('/login', 'App\Http\Controllers\UserController@loginview');
 Route::post('/authenticate', 'App\Http\Controllers\UserController@login');
 Route::post('/logout', 'App\Http\Controllers\UserController@logout');
@@ -33,10 +34,10 @@ Route::get('/filter','App\Http\Controllers\LogAbsenController@filter');
 Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
 
 Route::get('/karyawan', 'App\Http\Controllers\UserController@index');
-Route::resource('/karyawan', UserController::class);
 Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
 Route::get('/karyawan/{id}', [UserController::class], 'show')->name('show');
 Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
+Route::get('/kurang/{id}', 'App\Http\Controllers\UserController@lebihKurangLembur');
 
 Route::get('/lebihKerja', 'App\Http\Controllers\LebihKerjaController@index');
 

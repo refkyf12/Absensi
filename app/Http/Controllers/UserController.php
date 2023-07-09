@@ -142,4 +142,26 @@ class UserController extends Controller
         $data -> delete();
         return redirect('/karyawan')->with('msg', 'Data Berhasil di Hapus');
     }
+
+    public function lebihKurangLembur($id)
+    {
+        $user = User::find($id);
+        $user->jam_lebih = $user->jam_lebih -  ($user->jam_lembur*60);
+        $user->jam_lembur = null;
+        $user->save();
+
+        return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
+    }
+
+    public function reset()
+    {
+
+        User::query()->update([
+            'sisa_cuti' => 12,
+            'jam_lebih' => null,
+            'jam_lembur' => null,
+        ]);
+
+        return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
+    }
 }

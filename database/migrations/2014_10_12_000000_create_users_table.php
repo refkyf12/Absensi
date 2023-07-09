@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('role');
             $table->unsignedBigInteger('sisa_cuti')->nullable();
             $table->unsignedBigInteger('jam_lebih')->nullable();
+            $table->unsignedBigInteger('jam_lembur')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

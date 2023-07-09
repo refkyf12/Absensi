@@ -42,6 +42,14 @@ class LemburController extends Controller
             "message" => 'Tambah Berhasil',
         ]);
 
+        $user = User::find($request->nama);
+        $user->jam_lembur = $user->jam_lembur + $request->jumlah_jam;
+        $user->save();
+
+        // $user = User::find($request->nama);
+        // $user->jam_lebih = $user->jam_lebih - ($request->jumlah_jam*60); // Subtract $newValue from the old value
+        // $user->save();
+
         return redirect('/lembur')->with('msg', 'Data berhasil di hapus');
     }
 

@@ -22,6 +22,9 @@
                                 <th>User ID</th>
                                 <th>Nama</th>
                                 <th>Email</th>
+                                <th>Sisa Cuti</th>
+                                <th>Jam Lebih (Menit) </th>
+                                <th>Jam Lembur (Jam) </th>
                                 <th class="not-export-col">Edit</th>
                             </tr>
                         </thead>
@@ -32,10 +35,28 @@
                                 <td>{{ $dt->id }}</td>
                                 <td>{{ $dt->nama }}</td>
                                 <td>{{ $dt->email }}</td>
+                                <td>{{ $dt->sisa_cuti }}</td>
+
+                                @if($dt->jam_lebih == null || $dt->jam_lebih == 0)
+                                <td>Tidak pernah lebih</td>
+                                @endif
+                                @if($dt->jam_lebih != null && $dt->jam_lebih >= 0)
+                                <td>{{ $dt->jam_lebih }}</td>
+                                @endif
+
+                                @if($dt->jam_lembur == null || $dt->jam_lembur == 0)
+                                <td>Tidak pernah lembur</td>
+                                @endif
+                                @if($dt->jam_lembur != null && $dt->jam_lembur >= 0)
+                                <td>{{ $dt->jam_lembur }}</td>
+                                @endif                
+                                
                                 <td>
                                     <div style="width:60px">
                                         <a href="/karyawan/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit" id="edit"><i class="fa fa-pencil-square-o"></i></a>
-                                        <button href="/delete/{{ $dt->id }} "class="btn btn-danger btn-xs btn-hapus" id="delete"><i class="fa fa-trash-o"></i></button>                                    
+                                        @if($dt->jam_lembur != null && $dt->jam_lembur*60 <= $dt->jam_lebih)
+                                        <a href="/kurang/{{$dt->id}} "class="btn btn-danger btn-xs btn-hapus" id="delete"><i class="fa fa-trash-o"></i></a> 
+                                        @endif                                   
                                     </div>
                                 </td>
                             </tr>
@@ -43,6 +64,7 @@
                         </tbody>
                     </table>
                 </div>
+                <a href="/reset" class="btn btn-sm btn-flat btn-Danger"><i class="fa fa-trash-o"></i> RESET</a>
 
             </div>
         </div>
