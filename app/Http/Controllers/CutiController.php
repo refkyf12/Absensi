@@ -17,4 +17,15 @@ class CutiController extends Controller
         ]);
         return view('Cuti.index', ['data' => $cuti]);
     }
+
+    public function filter(Request $request){
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $cuti = Cuti::whereDate('tanggal','>=',$start_date)->whereDate('tanggal','<=',$end_date)->get();
+
+        //dd($log_absen);
+
+        return view('cuti.index', ['data'=>$cuti]);
+    }
 }

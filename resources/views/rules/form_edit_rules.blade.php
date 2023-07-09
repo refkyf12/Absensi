@@ -17,7 +17,7 @@
                     class="border"
                     style="padding: 20px"
                     method="POST"
-                    action="/rules/{{ $data->id }}"
+                    action="/rules/update/{{ $data->id }}"
                 >
                     @csrf
                     <input type="hidden"/>

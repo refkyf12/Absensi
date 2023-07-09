@@ -30,7 +30,7 @@ class RulesController extends Controller
             $data->key = $request->key;
             $data->value = $request->value;
             $data->update();
-            return redirect('/rules')->with('msg', 'Akun berhasil diperbarui');
+            return redirect('/rules')->with('msg', 'Rules berhasil diperbarui');
         } else {
             return Redirect::back()->withErrors(['msg' => 'Password harus diisi']);
         }

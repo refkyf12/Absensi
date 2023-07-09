@@ -44,11 +44,10 @@
                         </div>
                     </form>
                 </div>
+                
             </div>
-        </div>
-        
-        <div class="box-body">
-            <form method="GET" action="/filter">
+            <div class="box-body">
+            <form method="GET" action="/lembur/filter">
             <div class="form-group">
                 <label for="tanggal-filter-start">Tanggal Awal:</label>
                 <input type="date" name="start_date" class="form-control">
@@ -61,8 +60,10 @@
             <div class = "col-md-3"> 
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
+        </div>
+        
+        
             </form>
-
             <div class="table-responsive">
                 <table class="table table-hover myTable">
                     <thead>

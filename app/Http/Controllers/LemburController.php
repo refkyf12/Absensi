@@ -51,6 +51,17 @@ class LemburController extends Controller
         return redirect('/lembur')->with('msg', 'Data berhasil di hapus');
     }
 
+    public function filter(Request $request){
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $lembur = Lembur::whereDate('tanggal','>=',$start_date)->whereDate('tanggal','<=',$end_date)->get();
+
+        //dd($log_absen);
+
+        return view('lembur.index', ['data'=>$lembur]);
+    }
+
     // public function getData(){
     //     $users = DB::table('users')->get();
     //     //dd($users);
