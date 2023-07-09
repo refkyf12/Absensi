@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('sisa_cuti')->nullable();
             $table->unsignedBigInteger('jam_lebih')->nullable();
+            $table->unsignedBigInteger('jam_lembur')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

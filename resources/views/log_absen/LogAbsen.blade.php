@@ -45,64 +45,64 @@
                     </form>
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
         
-        <div class="box-body">
-            <form method="GET" action="/filter">
-            <div class="form-group">
-                <label for="tanggal-filter-start">Tanggal Awal:</label>
-                <input type="date" name="start_date" class="form-control">
-            </div>
+            <div class="box-body">
+                <form method="GET" action="/filter">
+                <div class="form-group">
+                    <label for="tanggal-filter-start">Tanggal Awal:</label>
+                    <input type="date" name="start_date" class="form-control">
+                </div>
 
-            <div class="form-group">
-                <label for="tanggal-filter-end">Tanggal Akhir:</label>
-                <input type="date" name="end_date" class="form-control">
-            </div>
-            <div class = "col-md-3"> 
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
-            </form>
+                <div class="form-group">
+                    <label for="tanggal-filter-end">Tanggal Akhir:</label>
+                    <input type="date" name="end_date" class="form-control">
+                </div>
+                <div class = "col-md-3"> 
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+                </form>
 
-            <div class="table-responsive">
-                <table class="table table-hover myTable">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>User ID</th>
-                            <th>Nama</th>
-                            <th>Tanggal</th>
-                            <th>Jam Masuk</th>
-                            <th>Jam Keluar</th>
-                            <th>Total Jam Kerja</th>
-                            <th>Keterlambatan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($data as $e=>$dt)
-                        <tr>
-                            <td>{{ $e+1 }}</td>
-                            <td>{{$dt->users_id}}</td>
-                            <td>
-                                @if ($dt->id)
-                                {{$dt->users->nama}}
+                <div class="table-responsive">
+                    <table class="table table-hover myTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>User ID</th>
+                                <th>Nama</th>
+                                <th>Tanggal</th>
+                                <th>Jam Masuk</th>
+                                <th>Jam Keluar</th>
+                                <th>Total Jam Kerja</th>
+                                <th>Keterlambatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($data as $e=>$dt)
+                            <tr>
+                                <td>{{ $e+1 }}</td>
+                                <td>{{$dt->users_id}}</td>
+                                <td>
+                                    @if ($dt->id)
+                                    {{$dt->users->nama}}
+                                    @endif
+                                </td>
+                                <td>{{$dt->tanggal}}</td>
+                                <td>{{$dt->jam_masuk}}</td>
+                                <td>{{$dt->jam_keluar}}</td>
+                                <td>{{$dt->total_jam}}</td>
+                                @if($dt->keterlambatan == true)
+                                    <td>Terlambat</td>
                                 @endif
-                            </td>
-                            <td>{{$dt->tanggal}}</td>
-                            <td>{{$dt->jam_masuk}}</td>
-                            <td>{{$dt->jam_keluar}}</td>
-                            <td>{{$dt->total_jam}}</td>
-                            @if($dt->keterlambatan == true)
-                            <td>Terlambat</td>
-                            @endif
-                            @if($dt->keterlambatan == false)
-                            <td>Tepat Waktu</td>
-                            @endif
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                @if($dt->keterlambatan == false)
+                                    <td>Tepat Waktu</td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
