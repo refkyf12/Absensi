@@ -44,25 +44,25 @@
                         </div>
                     </form>
                 </div>
-                
-            </div>
-        <!-- </div> -->
-        
-            <div class="box-body">
-                <form method="GET" action="/filter">
-                <div class="form-group">
-                    <label for="tanggal-filter-start">Tanggal Awal:</label>
-                    <input type="date" name="start_date" class="form-control">
-                </div>
+                <div class="box-body">
+                    <form method="GET" action="/filter">
+                        <div class="form-group">
+                            <label for="tanggal-filter-start">Tanggal Awal:</label>
+                            <input type="date" name="start_date" class="form-control">
+                        </div>
 
-                <div class="form-group">
-                    <label for="tanggal-filter-end">Tanggal Akhir:</label>
-                    <input type="date" name="end_date" class="form-control">
+                        <div class="form-group">
+                            <label for="tanggal-filter-end">Tanggal Akhir:</label>
+                            <input type="date" name="end_date" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </form>
                 </div>
-                <div class = "col-md-3"> 
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                </div>
-                </form>
+                <!-- </div> -->
+
+
 
                 <div class="table-responsive">
                     <table class="table table-hover myTable">
@@ -93,10 +93,10 @@
                                 <td>{{$dt->jam_keluar}}</td>
                                 <td>{{$dt->total_jam}}</td>
                                 @if($dt->keterlambatan == true)
-                                    <td>Terlambat</td>
+                                <td>Terlambat</td>
                                 @endif
                                 @if($dt->keterlambatan == false)
-                                    <td>Tepat Waktu</td>
+                                <td>Tepat Waktu</td>
                                 @endif
                             </tr>
                             @endforeach
