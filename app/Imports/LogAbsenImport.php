@@ -104,6 +104,7 @@ class LogAbsenImport implements ToCollection
                 $user->save();
             }
 
+
             // $batasKerja = strtotime("17:00:00");
         
             // $totalLebih = $keluar-$batasKerja;
