@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Rules;
+use App\Models\logKegiatan;
+use Illuminate\Support\Facades\Auth;
 
 class RulesController extends Controller
 {
@@ -30,6 +32,19 @@ class RulesController extends Controller
             $data->key = $request->key;
             $data->value = $request->value;
             $data->update();
+            if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $waktu = $request->value;
+                    $text = 'Melakukan Edit Rules Menjadi ' . $waktu;
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
             return redirect('/rules')->with('msg', 'Rules berhasil diperbarui');
         } else {
             return Redirect::back()->withErrors(['msg' => 'Password harus diisi']);

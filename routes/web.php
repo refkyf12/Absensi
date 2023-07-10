@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LebihKerjaController;
 use App\Http\Controllers\LemburController;
 use App\Http\Controllers\RulesController;
+use App\Http\Controllers\LogKegiatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,8 +55,12 @@ Route::get('/lembur/filter','App\Http\Controllers\LemburController@filter');
 Route::post('/lembur/create', 'App\Http\Controllers\LemburController@store');
 Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
 
+Route::get('/log_kegiatan', 'App\Http\Controllers\LogKegiatanController@index');
+
 // Route::resource('cuti', CutiController::class);
 Route::get('/cuti', 'App\Http\Controllers\CutiController@index');
+Route::get('/cuti/create', 'App\Http\Controllers\CutiController@create');
+Route::post('/cuti/create/store', 'App\Http\Controllers\CutiController@store');
 Route::get('/cuti/filter','App\Http\Controllers\CutiController@filter');
 
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

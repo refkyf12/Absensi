@@ -4,18 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
-class Cuti extends Model
+class LogKegiatan extends Model
 {
     use HasFactory;
-    protected $table = 'cuti';
+
+    protected $table = 'log_kegiatan';
 
     protected $fillable = [
         'id',
         'users_id',
-        'tanggal_awal',
-        'tanggal_akhir',
-        'jumlah_hari',
+        'kegiatan',
     ];
 
     public function user(){

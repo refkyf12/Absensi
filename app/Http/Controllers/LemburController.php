@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Lembur;
 use App\Models\User;
 use DB;
+use App\Models\logKegiatan;
+use Illuminate\Support\Facades\Auth;
 
 
 class LemburController extends Controller
@@ -37,6 +39,20 @@ class LemburController extends Controller
         $lemburData->tanggal = $request->tanggal;
         $lemburData->jumlah_jam = $request->jumlah_jam;
         $lemburData->save();
+
+        if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $data = $request->nama;
+                    $text = 'Melakukan Tambah Lembur Karyawan ' . $data;
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
         if (request() ->segment(1)=='api') return response()->json([
             "error" => false,
             "message" => 'Tambah Berhasil',
@@ -45,6 +61,8 @@ class LemburController extends Controller
         $user = User::find($request->nama);
         $user->jam_lembur = $user->jam_lembur + $request->jumlah_jam;
         $user->save();
+
+        
 
         // $user = User::find($request->nama);
         // $user->jam_lebih = $user->jam_lebih - ($request->jumlah_jam*60); // Subtract $newValue from the old value

@@ -5,6 +5,8 @@ namespace App\Imports;
 use App\Models\logAbsen;
 use App\Models\lebihKerja;
 use App\Models\User;
+use App\Models\logKegiatan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
@@ -22,6 +24,12 @@ class LogAbsenImport implements ToCollection
 	}
     public function getBatasKerja() {
 		return $this->batasKerja; 
+    }
+    public function setLog($kegiatan){
+		$this->kegiatan = $kegiatan;
+	}
+    public function getLog() {
+		return $this->kegiatan; 
 	}
     /**
     * @param array $row
@@ -102,7 +110,10 @@ class LogAbsenImport implements ToCollection
                 $user = User::find($row[1]);
                 $user->jam_lebih = $user->jam_lebih + $newValue;
                 $user->save();
+                
             }
+
+            
 
             // $batasKerja = strtotime("17:00:00");
         
@@ -140,6 +151,19 @@ class LogAbsenImport implements ToCollection
             // $user->save();
 
         }
+
+        if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $text = 'Melakukan Import Excel';
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
         
     }
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\logKegiatan;
 
 
 class UserController extends Controller
@@ -20,7 +21,12 @@ class UserController extends Controller
     public function loginview()
     {
         return view('auth.login');
-    }  
+    } 
+    
+    public function getId()
+    {
+        return $this->id;
+    }
 
     public function login(Request $request)
     {
@@ -92,7 +98,22 @@ class UserController extends Controller
         $karyawan->password = $pass_crypt;
 
         $karyawan->save();
+        if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $data = $request->nama;
+                    $text = 'Melakukan Tambah Karyawan ' . $data;
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
         return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
+
+        
     }
 
     /**
@@ -128,11 +149,27 @@ class UserController extends Controller
             $data->password = $pass_crypt;
             $data->role = $request->role;
             $data->update();
+
+            if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $karyawan = $request->nama;
+                    $date = date("Y-m-d h:i:sa");
+                    $text = 'Melakukan Edit Karyawan ' . $karyawan;
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
             return redirect('/karyawan')->with('msg', 'Akun berhasil diperbarui');
         } else {
             $users_id = optional(Auth::user())->users_id;
             return Redirect::back()->withErrors(['msg' => 'Password harus diisi']);
         }
+
+        
     }
 
     /**
