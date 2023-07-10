@@ -125,6 +125,7 @@ class UserController extends Controller
             $data->email = $request->email;
             $pass_crypt = bcrypt($request->password);
             $data->password = $pass_crypt;
+            $data->role = $request->role;
             $data->update();
             return redirect('/karyawan')->with('msg', 'Akun berhasil diperbarui');
         } else {

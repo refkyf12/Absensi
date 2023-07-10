@@ -35,7 +35,7 @@ Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@
 
 Route::get('/karyawan', 'App\Http\Controllers\UserController@index');
 Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
-Route::get('/karyawan/{id}', [UserController::class], 'show')->name('show');
+Route::get('/karyawan/{id}', 'App\Http\Controllers\UserController@show');
 Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
 Route::get('/kurang/{id}', 'App\Http\Controllers\UserController@lebihKurangLembur');
 
