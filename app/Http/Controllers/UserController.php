@@ -88,6 +88,7 @@ class UserController extends Controller
         $karyawan->nama = $request->nama;
         $karyawan->email = $request->email;
         $pass_crypt = bcrypt($request->password);
+        $karyawan->role = $request->role;
         $karyawan->password = $pass_crypt;
 
         $karyawan->save();

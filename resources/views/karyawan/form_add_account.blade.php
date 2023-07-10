@@ -17,7 +17,7 @@
                     class="border"
                     style="padding: 20px"
                     method="POST"
-                    action="/{{ $action }}"
+                    action="{{ url('/karyawan/create/store') }}"
                 >
                     @csrf
                     <input type="hidden" name="_method" value="{{ $method }}" />
@@ -55,6 +55,15 @@
                             name="password"
                             class="form-control"
                             value="{{ isset($data)?$data->password:'' }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input
+                            type="number"
+                            name="role"
+                            class="form-control"
+                            value="{{ isset($data)?$data->role:'' }}"
                         />
                     </div>
                     <br>

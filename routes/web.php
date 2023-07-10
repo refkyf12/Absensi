@@ -34,6 +34,8 @@ Route::get('/filter','App\Http\Controllers\LogAbsenController@filter');
 Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
 
 Route::get('/karyawan', 'App\Http\Controllers\UserController@index');
+Route::get('/karyawan/create', 'App\Http\Controllers\UserController@create');
+Route::post('/karyawan/create/store', 'App\Http\Controllers\UserController@store');
 Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
 Route::get('/karyawan/{id}', 'App\Http\Controllers\UserController@show');
 Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
