@@ -88,6 +88,8 @@ class LogAbsenController extends Controller
         // import data
         $batas = new LogAbsenImport;
         $rules = Rules::where('key', "batas_waktu")->first(); 
+        $batasKerja = Rules::where('key', "batas_kerja")->first();
+        $batasKerja->setBatasKerja($batasKerja["value"]);
         $batas->setBatasWaktu($rules["value"]);
 		Excel::import($batas, public_path('/file_log_absen/'.$nama_file));
  

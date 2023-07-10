@@ -22,6 +22,7 @@
                                 <th>User ID</th>
                                 <th>Nama</th>
                                 <th>Email</th>
+                                <th>Role</th>
                                 <th>Sisa Cuti</th>
                                 <th>Jam Lebih (Menit) </th>
                                 <th>Jam Lembur (Jam) </th>
@@ -35,6 +36,15 @@
                                 <td>{{ $dt->id }}</td>
                                 <td>{{ $dt->nama }}</td>
                                 <td>{{ $dt->email }}</td>
+                                @if($dt->role == 0)
+                                <td>Karyawan</td>
+                                @endif
+                                @if($dt->role == 1)
+                                <td>Admin</td>
+                                @endif
+                                @if($dt->role == 2)
+                                <td>Project Manager</td>
+                                @endif
                                 <td>{{ $dt->sisa_cuti }}</td>
 
                                 @if($dt->jam_lebih == null || $dt->jam_lebih == 0)

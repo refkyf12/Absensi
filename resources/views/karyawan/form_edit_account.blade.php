@@ -56,6 +56,14 @@
                             class="form-control"
                             value="{{ $data->password }}"
                         />
+                    <div class="form-group">
+                        <label>Role (0-2)</label>
+                        <input
+                            type="number"
+                            name="role"
+                            class="form-control"
+                            value="{{ $data->role }}"
+                        />
                     </div>
                     @if($errors->any())
                     <b style="color:red" >{{$errors->first()}}</b>

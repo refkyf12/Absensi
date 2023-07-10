@@ -16,6 +16,12 @@ class LogAbsenImport implements ToCollection
 	}
     public function getBatasWaktu() {
 		return $this->batas; 
+    }
+    public function setBatasKerja($batasKerja){
+		$this->batasKerja = $batasKerja;
+	}
+    public function getBatasKerja() {
+		return $this->batasKerja; 
 	}
     /**
     * @param array $row
