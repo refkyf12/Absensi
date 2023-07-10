@@ -63,40 +63,75 @@ class LogAbsenImport implements ToCollection
                 'keterlambatan'=> $statusTerlambat,
             ]);
 
-            $batasKerja = strtotime("17:00:00");
-        
-            $totalLebih = $keluar-$batasKerja;
-            $totalJamForLebih = $totalLebih;
-        
-            $totalJamLebih = $totalLebih/3600;
-            $totalJamLebih = (int)$totalJamLebih;
-        
-            $totalMenitLebih = ($totalLebih%3600)/60;
-        
-            if ($totalJamLebih / 10 < 1){
-                $totalJamLebih = "0".$totalJamLebih;
+            if ($total >28800){ //28800 = 8 jam
+                $totalLebih = (($keluar-1688947200)-(strtotime($masuk)-1688947200))-28800;
+                $totalJamForLebih = $totalLebih;
+            
+                $totalJamLebih = $totalLebih/3600;
+                $totalJamLebih = (int)$totalJamLebih;
+            
+                $totalMenitLebih = ($totalLebih%3600)/60;
+            
+                if ($totalJamLebih / 10 < 1){
+                    $totalJamLebih = "0".$totalJamLebih;
+                }
+            
+                if ($totalMenitLebih / 10 < 1){
+                    $totalMenitLebih = "0".$totalMenitLebih;
+                }
+            
+                $totalLebih = $totalJamLebih.":".$totalMenitLebih;
+
+                lebihKerja::create([
+                    'users_id' => $row[1],
+                    'absen_id' => $row[0],
+                    'total_jam' => $totalLebih,
+                ]);
+            
+
+                $newValue = $totalJamForLebih/60;
+
+                // User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
+
+                $user = User::find($row[1]);
+                $user->jam_lebih = $user->jam_lebih + $newValue;
+                $user->save();
             }
+
+            // $batasKerja = strtotime("17:00:00");
         
-            if ($totalMenitLebih / 10 < 1){
-                $totalMenitLebih = "0".$totalMenitLebih;
-            }
+            // $totalLebih = $keluar-$batasKerja;
+            // $totalJamForLebih = $totalLebih;
         
-            $totalLebih = $totalJamLebih.":".$totalMenitLebih;
+            // $totalJamLebih = $totalLebih/3600;
+            // $totalJamLebih = (int)$totalJamLebih;
+        
+            // $totalMenitLebih = ($totalLebih%3600)/60;
+        
+            // if ($totalJamLebih / 10 < 1){
+            //     $totalJamLebih = "0".$totalJamLebih;
+            // }
+        
+            // if ($totalMenitLebih / 10 < 1){
+            //     $totalMenitLebih = "0".$totalMenitLebih;
+            // }
+        
+            // $totalLebih = $totalJamLebih.":".$totalMenitLebih;
 
-            lebihKerja::create([
-                'users_id' => $row[1],
-                'absen_id' => $row[0],
-                'total_jam' => $totalLebih,
-            ]);
+            // lebihKerja::create([
+            //     'users_id' => $row[1],
+            //     'absen_id' => $row[0],
+            //     'total_jam' => $totalLebih,
+            // ]);
         
 
-            $newValue = $totalJamForLebih/60;
+            // $newValue = $totalJamForLebih/60;
 
-            // User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
+            // // User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
 
-            $user = User::find($row[1]);
-            $user->jam_lebih = $user->jam_lebih + $newValue;
-            $user->save();
+            // $user = User::find($row[1]);
+            // $user->jam_lebih = $user->jam_lebih + $newValue;
+            // $user->save();
 
         }
         
