@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users');
-            $table->date('tanggal');
+            $table->date('tanggal_awal');
+            $table->date('tanggal_akhir');
             $table->integer('jumlah_hari');
+            $table->unsignedBigInteger('status')->nullable();
             $table->timestamps();
         });
     }

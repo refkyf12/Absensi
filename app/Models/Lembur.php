@@ -14,7 +14,10 @@ class Lembur extends Model
         'id',
         'users_id',
         'tanggal',
+        'jam_awal',
+        'jam_akhir',
         'jumlah_jam',
+        'status',
     ];
 
     public function user(){

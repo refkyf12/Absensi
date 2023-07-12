@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\lebihKerja;
 use App\Models\logAbsen;
+use App\Models\logKegiatan;
 
 class User extends Authenticatable
 {
@@ -49,6 +50,10 @@ class User extends Authenticatable
 
     public function log_absen(){
         return $this->hasMany(logAbsen::class);
+    }
+
+    public function log_kegiatan(){
+        return $this->hasMany(logKegiatan::class);
     }
 
     public function lebihKerja(){

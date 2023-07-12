@@ -55,12 +55,21 @@
                         />
                     </div>
                     <div class="form-group">
-                        <label>Lama Lembur (jam)</label>
+                        <label>Jam Awal</label>
                         <input
-                            type="int"
-                            name="jumlah_jam"
+                            type="string"
+                            name="jam_awal"
                             class="form-control"
-                            value="{{ isset($data)?$data->jumlah_jam:'' }}"
+                            value="{{ isset($data)?$data->jam_awal:'' }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Jam Akhir</label>
+                        <input
+                            type="string"
+                            name="jam_akhir"
+                            class="form-control"
+                            value="{{ isset($data)?$data->jam_akhir:'' }}"
                         />
                     </div>
                     <div style="text-align: center">

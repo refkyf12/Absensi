@@ -25,7 +25,8 @@
                                 <th>Role</th>
                                 <th>Sisa Cuti</th>
                                 <th>Jam Lebih (Menit) </th>
-                                <th>Jam Lembur (Jam) </th>
+                                <th>Jam Kurang (Menit) </th>
+                                <th>Jam Lembur (Menit) </th>
                                 <th class="not-export-col">Edit</th>
                             </tr>
                         </thead>
@@ -52,6 +53,13 @@
                                 @endif
                                 @if($dt->jam_lebih != null && $dt->jam_lebih >= 0)
                                 <td>{{ $dt->jam_lebih }}</td>
+                                @endif
+
+                                @if($dt->jam_kurang == null || $dt->jam_kurang == 0)
+                                <td>Tidak pernah kurang</td>
+                                @endif
+                                @if($dt->jam_kurang != null && $dt->jam_kurang >= 0)
+                                <td>{{ $dt->jam_kurang }}</td>
                                 @endif
 
                                 @if($dt->jam_lembur == null || $dt->jam_lembur == 0)

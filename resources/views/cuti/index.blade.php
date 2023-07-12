@@ -7,9 +7,9 @@
         <h4>Cuti</h4>
         <div class="box box-warning">
             <div class="box-header">
-                <!-- <p>
-                    <a href="/lembur/create" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Tambah Data</a>
-                </p> -->
+                <p>
+                    <a href="/cuti/create" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Tambah Data</a>
+                </p>
             </div>
             <div class="box-body">
                 <form method="GET" action="/cuti/filter">
@@ -34,8 +34,11 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Tanggal Cuti</th>
+                                <th>Tanggal Awal</th>
+                                <th>Tanggal Akhir</th>
                                 <th>Lama Cuti (hari) </th>
+                                <th>Approval</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,8 +51,17 @@
                                     {{$dt->User->nama}}
                                     @endif
                                 </td>
-                                <td>{{ $dt->tanggal }}</td>
+                                <td>{{ $dt->tanggal_awal }}</td>
+                                <td>{{ $dt->tanggal_akhir }}</td>
                                 <td>{{ $dt->jumlah_hari }}</td>
+                                <td>{{ $dt->status }}</td>
+                                <td>
+                                <div style="width:90px">
+                                            <a href="/cuti/status/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"
+                                                id="edit"><i class="fa fa-check"></i></a>
+                                        </div>
+                                </td>
+
 
                             </tr>
                             @endforeach

@@ -28,6 +28,7 @@
                             name="id"
                             class="form-control"
                             value="{{ $data->id }}"
+                            readonly
                         />
                     </div>
                     <div class="form-group">
@@ -37,6 +38,7 @@
                             name="key"
                             class="form-control"
                             value="{{ $data->key}}"
+                            readonly
                         />
                     </div>
                     <div class="form-group">

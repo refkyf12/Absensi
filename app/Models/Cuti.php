@@ -13,8 +13,10 @@ class Cuti extends Model
     protected $fillable = [
         'id',
         'users_id',
-        'tanggal',
+        'tanggal_awal',
+        'tanggal_akhir',
         'jumlah_hari',
+        'status',
     ];
 
     public function user(){

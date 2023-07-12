@@ -8,9 +8,11 @@
         <li class="menu-sidebar"><a href="{{ url('/karyawan') }}"><span class="fa fa-firefox"></span>Karyawan</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/log_absen') }}"><span class="fa fa-firefox"></span>Absen</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/lebihKerja') }}"><span class="fa fa-firefox"></span>Lebih Kerja</span></a></li>
+        <li class="menu-sidebar"><a href="{{ url('/kurangKerja') }}"><span class="fa fa-firefox"></span>Kurang Kerja</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/lembur') }}"><span class="fa fa-firefox"></span>Lembur</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/rules') }}"><span class="fa fa-firefox"></span>Rules</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/cuti') }}"><span class="fa fa-firefox"></span>Cuti</span></a></li>
+        <li class="menu-sidebar"><a href="{{ url('/log_kegiatan') }}"><span class="fa fa-firefox"></span>Log Kegiatan</span></a></li>
         @endif
 
         @if(\Auth::user()->role == 2)

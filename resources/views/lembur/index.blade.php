@@ -38,7 +38,8 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>Tanggal Lembur</th>
-                                    <th>Lama Lembur (jam) </th>
+                                    <th>Lama Lembur (Menit) </th>
+                                    <th>Status </th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -54,10 +55,15 @@
                                     </td>
                                     <td>{{ $dt->tanggal }}</td>
                                     <td>{{ $dt->jumlah_jam }}</td>
+                                    <td>{{ $dt->status }}</td>
                                     <td>
                                         <div style="width:90px">
                                             <a href="/delete_lembur/{{$dt->id}}" class="btn btn-danger btn-xs btn-edit"
                                                 id="edit"><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                        <div style="width:90px">
+                                            <a href="/lembur/status/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"
+                                                id="edit"><i class="fa fa-check"></i></a>
                                         </div>
                                     </td>
 
