@@ -8,6 +8,7 @@ use App\Http\Controllers\LemburController;
 use App\Http\Controllers\RulesController;
 use App\Http\Controllers\LogKegiatanController;
 use App\Http\Controllers\JamKurangController;
+use App\Http\Controllers\SoapController;
 
 
 /*
@@ -63,6 +64,8 @@ Route::post('/lembur/status/update/{id}', 'App\Http\Controllers\LemburController
 Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
 
 Route::get('/log_kegiatan', 'App\Http\Controllers\LogKegiatanController@index');
+
+Route::post('/soap_data', 'App\Http\Controllers\SoapController@logAbsenStore');
 
 // Route::resource('cuti', CutiController::class);
 Route::get('/cuti', 'App\Http\Controllers\CutiController@index');

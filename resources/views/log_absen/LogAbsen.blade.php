@@ -21,6 +21,9 @@
         @endif
         <div class="box box-warning">
             <div class="box-header">
+                <p>
+                    <a href="/soap_data" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>Test Soapphp</a>
+                </p>
                 <div class="modal-dialog" role="document">
                     <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
                         <div class="modal-content">
@@ -68,7 +71,6 @@
                     <table class="table table-hover myTable">
                         <thead>
                             <tr>
-                                <th>No</th>
                                 <th>User ID</th>
                                 <th>Nama</th>
                                 <th>Tanggal</th>
@@ -81,7 +83,6 @@
                         <tbody>
                             @foreach($data as $e=>$dt)
                             <tr>
-                                <td>{{ $e+1 }}</td>
                                 <td>{{$dt->users_id}}</td>
                                 <td>
                                     @if ($dt->id)
