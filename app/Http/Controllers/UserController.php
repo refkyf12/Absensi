@@ -91,6 +91,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $karyawan = new User;
+        $karyawan->id = $request->users_id;
+
         $karyawan->nama = $request->nama;
         $karyawan->email = $request->email;
         $pass_crypt = bcrypt($request->password);
@@ -143,6 +145,7 @@ class UserController extends Controller
     {
         $data = User::find($users_id);
         if ($request->password != ""){
+            $data->id = $request->users_id;
             $data->nama = $request->nama;
             $data->email = $request->email;
             $pass_crypt = bcrypt($request->password);

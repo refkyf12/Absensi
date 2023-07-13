@@ -40,17 +40,15 @@ class LogAbsenImport implements ToCollection
     */
     public function collection(Collection $rows)
     {
+        //dd($rows);
         foreach ($rows as $row) {
-            $temp = explode(" ",$row[3]);
+            //$temp = explode(" ",$row[3]);
             //dd($temp[1]);
-            $time = strtotime($temp[0]);
+            $time = strtotime($row[3]);
             $newformat = date('Y-m-d',$time);
-            $keluar = strtotime($row[4]);
-            if ($row[0] == 64){
-                dd($row);
-            }
-            $masuk = $temp[1];
-            $total = (strtotime($row[4]) - strtotime($masuk));
+            $keluar = strtotime($row[5]);
+            $masuk = $row[4];
+            $total = ($keluar - strtotime($masuk));
             //coba
             $totaljam = $total/3600;
             $totaljam = (int)$totaljam;
@@ -79,13 +77,14 @@ class LogAbsenImport implements ToCollection
                 'users_id' => $row[1],
                 'tanggal' => $newformat,
                 'jam_masuk' => $masuk,
-                'jam_keluar' => $row[4],
+                'jam_keluar' => $row[5],
                 'total_jam' => $totalWaktu,
                 'keterlambatan'=> $statusTerlambat,
             ]);
 
             if ($total >= 28800){ //28800 = 8 jam
                 $totalLebih = (($keluar-1688947200)-(strtotime($masuk)-1688947200))-28800;
+                $jamKerjaLebih = $totalLebih;
                 $lebihForLembur = $totalLebih/60;
                 // --------------------------------------------------------------------------------------------------
                 $lembur = Lembur::where('users_id', $row[1])->where('tanggal', $newformat)->first();                
@@ -99,10 +98,11 @@ class LogAbsenImport implements ToCollection
                 //----------------------------------------------------------------------------------------------------------------
                 $totalJamForLebih = $totalLebih;
             
-                $totalJamLebih = $totalLebih/3600;
+                //----------------------------------------------------------------------------------------------------------------
+                $totalJamLebih = $jamKerjaLebih/3600;
                 $totalJamLebih = (int)$totalJamLebih;
             
-                $totalMenitLebih = ($totalLebih%3600)/60;
+                $totalMenitLebih = ($jamKerjaLebih%3600)/60;
             
                 if ($totalJamLebih / 10 < 1){
                     $totalJamLebih = "0".$totalJamLebih;
@@ -112,14 +112,15 @@ class LogAbsenImport implements ToCollection
                     $totalMenitLebih = "0".$totalMenitLebih;
                 }
             
-                $totalLebih = $totalJamLebih.":".$totalMenitLebih;
+                $jamKerjaLebih = $totalJamLebih.":".$totalMenitLebih;
 
                 lebihKerja::create([
                     'users_id' => $row[1],
                     'absen_id' => $row[0],
-                    'total_jam' => $totalLebih,
+                    'total_jam' => $jamKerjaLebih,
                 ]);
-            
+                //----------------------------------------------------------------------------------------------------------------
+
 
                 $newValue = $totalJamForLebih/60;
 

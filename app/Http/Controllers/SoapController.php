@@ -14,6 +14,10 @@ use Monolog\Handler\FirePHPHandler;
 
 use App\lib\TAD;
 use App\Models\logAbsen;
+use App\Models\Lembur;
+use App\Models\lebihKerja;
+use App\Models\User;
+use App\Models\JamKurang;
 use App\Http\Controllers\TADFactory;
 
 class SoapController extends Controller
@@ -22,12 +26,13 @@ class SoapController extends Controller
         $tad = (new TADFactory((['ip'=> '10.50.0.60', 'com_key'=>0])))->get_instance();
         return $tad;
     }
-    public function logAbsenStore(Request $request){
-        // $dotenv = Dotenv\Dotenv::create(__DIR__);
+    public function logAbsenStore(Request $request)
+    {
+        // $dotenv = Dotenv\Dotenv::create(_DIR_);
         // $dotenv->load();   
         $logger = new Logger('soap-service');
         // Now add some handlers
-        $logger->pushHandler(new StreamHandler(__DIR__.'/logs/'.date( "Y-m-d").'.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler(_DIR_.'/logs/'.date( "Y-m-d").'.log', Logger::DEBUG));
         $logger->pushHandler(new FirePHPHandler());
         $tad = (new TADFactory((['ip'=> '10.50.0.60', 'com_key'=>0])))->get_instance();
         echo 'starting read data in machine finger print ..'. getenv('IP_MESIN_ABSEN') . "<br/>";
@@ -87,7 +92,121 @@ class SoapController extends Controller
                 $logAbsen->tanggal = $yesterday;
                 $logAbsen->jam_masuk = $jamAwal;
                 $logAbsen->jam_keluar = $jamAkhir;
+
+                $totaljam = $total/3600;
+                $totaljam = (int)$totaljam;
+                $totalmenit = ($total%3600)/60;
+
+                $total = (strtotime($jamAkhir) - strtotime($jamAwal));
+
+                if ($totaljam / 10 < 1){
+                    $totaljam = "0".$totaljam;
+                }
+        
+                if ($totalmenit / 10 < 1){
+                    $totalmenit = "0".$totalmenit;
+                }
+        
+                $totalWaktu = $totaljam.":".$totalmenit;
+
+                $batas = $this->getBatasWaktu();
+                if (strtotime($jamAwal) > strtotime($batas))  {
+                    $statusTerlambat = true;
+                }else{
+                    $statusTerlambat = false;
+                }
+
+                $logAbsen->total_jam = $totalWaktu;
+                $logAbsen->keterlambatan = $statusTerlambat;
                 $logAbsen->save();
+
+                $id = $logAbsen->id;
+
+                if ($total >= 28800){ //28800 = 8 jam
+                    $totalLebih = ((strtotime($jamAkhir)-1688947200)-(strtotime($jamAwal)-1688947200))-28800;
+                    $jamKerjaLebih = $totalLebih;
+                    $lebihForLembur = $totalLebih/60;
+                    // --------------------------------------------------------------------------------------------------
+                    $lembur = Lembur::where('users_id', $item['id_karyawan'])->where('tanggal', $yesterday)->first();                
+                    if($lembur != null){
+                        if($lembur->status == 1){
+                            if($lebihForLembur > $lembur->jumlah_jam){ //tambahan
+                                $lebihForLembur = $lebihForLembur - $lembur->jumlah_jam;
+                                $totalLebih = $lebihForLembur*60;
+                            }else{
+                                $totalLebih = 0;
+                            }
+                        }
+                        //$newValue = $newValue - $lembur->jumlah_jam;
+                    }
+                    //----------------------------------------------------------------------------------------------------------------
+                    $totalJamForLebih = $totalLebih;
+                
+                    //----------------------------------------------------------------------------------------------------------------
+                    $totalJamLebih = $jamKerjaLebih/3600;
+                    $totalJamLebih = (int)$totalJamLebih;
+                
+                    $totalMenitLebih = ($jamKerjaLebih%3600)/60;
+                
+                    if ($totalJamLebih / 10 < 1){
+                        $totalJamLebih = "0".$totalJamLebih;
+                    }
+                
+                    if ($totalMenitLebih / 10 < 1){
+                        $totalMenitLebih = "0".$totalMenitLebih;
+                    }
+                
+                    $jamKerjaLebih = $totalJamLebih.":".$totalMenitLebih;
+    
+                    lebihKerja::create([
+                        'users_id' => $item['id_karyawan'],
+                        'absen_id' => $id,
+                        'total_jam' => $jamKerjaLebih,
+                    ]);
+                    //----------------------------------------------------------------------------------------------------------------
+    
+    
+                    $newValue = $totalJamForLebih/60;
+    
+                    // User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
+    
+                    $user = User::find($item['id_karyawan']);
+                    $user->jam_lebih = $user->jam_lebih + $newValue;
+                    $user->save();
+                    
+                }
+                
+                if ($total < 28800){
+                    $totalKurang = 28800 - $total;
+                    $newValue = $totalKurang/60;
+    
+                    $totalJamForKurang = $totalKurang;
+                
+                    $totalJamForKurang = $totalKurang/3600;
+                    $totalJamForKurang = (int)$totalJamForKurang;
+                
+                    $totalMenitKurang = ($totalKurang%3600)/60;
+                
+                    if ($totalJamForKurang / 10 < 1){
+                        $totalJamForKurang = "0".$totalJamForKurang;
+                    }
+                
+                    if ($totalMenitKurang / 10 < 1){
+                        $totalMenitKurang = "0".$totalMenitKurang;
+                    }
+                
+                    $totalKurang = $totalJamForKurang.":".$totalMenitKurang;
+    
+                    JamKurang::create([
+                        'users_id' => $item['id_karyawan'],
+                        'absen_id' => $id,
+                        'total_jam_kurang' => $totalKurang,
+                    ]);
+    
+                    $user = User::find($item['id_karyawan']);
+                    $user->jam_kurang = $user->jam_kurang + $newValue;
+                    $user->save();
+                }
             }
         }
         return redirect('/log_absen')->with('msg', 'Tambah akun berhasil');
