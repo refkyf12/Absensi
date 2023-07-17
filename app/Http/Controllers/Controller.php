@@ -11,7 +11,7 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
     public function validate(){
-        if(\Auth::user()->role == 0) {
+        if(\Auth::user()->role_id == 0) {
             return abort(404);
         }
     }

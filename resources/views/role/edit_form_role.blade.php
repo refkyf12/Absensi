@@ -17,12 +17,12 @@
                     class="border"
                     style="padding: 20px"
                     method="POST"
-                    action="/karyawan/update/{{ $data->id }}"
+                    action="/role/update/{{$data->id}}"
                 >
                     @csrf
                     <input type="hidden"/>
                     <div class="form-group">
-                        <label>NIP</label>
+                        <label>ID</label>
                         <input
                             type="string"
                             name="id"
@@ -32,54 +32,27 @@
                         />
                     </div>
                     <div class="form-group">
-                        <label>Nama</label>
+                        <label>Nama Role</label>
                         <input
                             type="string"
-                            name="nama"
+                            name="nama_role"
                             class="form-control"
-                            value="{{ $data->nama}}"
+                            value="{{ $data->nama_role}}"
                         />
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input
-                            type="string"
-                            name="email"
-                            class="form-control"
-                            value="{{ $data->email }}"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            class="form-control"
-                            value="{{ $data->password }}"
-                        />
-                    <div class="form-group">
-                        <label>Role (0-2)</label>
+                        <label>Cuti</label>
                         <input
                             type="number"
-                            name="role"
+                            name="sisa_cuti"
                             class="form-control"
-                            value="{{ $data->role_id }}"
+                            value="{{ $data->sisa_cuti }}"
                         />
                     </div>
                     @if($errors->any())
                     <b style="color:red" >{{$errors->first()}}</b>
                     @endif
                     <br>
-                    <!-- <div class="form-group">
-                        <label>Role</label>
-                        <br>
-                        <select required name="role">
-                        <option value="">--pilih--</option>
-                        <option value=1>Admin</option>
-                        <option value=2>HRD</option>
-                        <option value=3>Karyawan</option>
-                        </select>
-                    </div> -->
                     <div style="text-align: center">
                         <button class="btn btn-success">Simpan</button>
                     </div>

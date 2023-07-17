@@ -21,9 +21,28 @@
         @endif
         <div class="box box-warning">
             <div class="box-header">
-                <p>
-                    <a href="/soap_data" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>Test Soapphp</a>
-                </p>
+                <form
+                    class="border"
+                    style="padding: 20px"
+                    method="POST"
+                    action="{{ url('/soap_data') }}"
+                >
+                @csrf
+                <div style="text-align: center">
+                        <button class="btn btn-success">Tambah Data Log absen</button>
+                    </div>
+                </form>
+                <form
+                    class="border"
+                    style="padding: 20px"
+                    method="POST"
+                    action="{{ url('/soap_data_july') }}"
+                >
+                @csrf
+                <div style="text-align: center">
+                        <button class="btn btn-success">Tambah Data Log absen Juli</button>
+                    </div>
+                </form>
                 <div class="modal-dialog" role="document">
                     <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
                         <div class="modal-content">

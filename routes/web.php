@@ -9,6 +9,10 @@ use App\Http\Controllers\RulesController;
 use App\Http\Controllers\LogKegiatanController;
 use App\Http\Controllers\JamKurangController;
 use App\Http\Controllers\SoapController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\LogActivityController;
+use App\Http\Controllers\LiburNasionalController;
+use App\Http\Controllers\AkumulasiTahunanController;
 
 
 /*
@@ -25,6 +29,11 @@ use App\Http\Controllers\SoapController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/soap_activity', 'App\Http\Controllers\LogActivityController@store');
+Route::post('/soap_data', 'App\Http\Controllers\SoapController@logAbsenStore');
+Route::post('/soap_data_july', 'App\Http\Controllers\SoapController@getJulyData');
+Route::get('/log_activity', 'App\Http\Controllers\LogActivityController@index');
 
 
 Route::get('/reset', 'App\Http\Controllers\UserController@reset'); 
@@ -43,7 +52,7 @@ Route::get('/karyawan/create', 'App\Http\Controllers\UserController@create');
 Route::post('/karyawan/create/store', 'App\Http\Controllers\UserController@store');
 Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
 Route::get('/karyawan/{id}', 'App\Http\Controllers\UserController@show');
-Route::post('/update/{id}', 'App\Http\Controllers\UserController@update');
+Route::post('/karyawan/update/{id}', 'App\Http\Controllers\UserController@update');
 Route::get('/kurang/{id}', 'App\Http\Controllers\UserController@lebihKurangLembur');
 
 Route::get('/lebihKerja', 'App\Http\Controllers\LebihKerjaController@index');
@@ -63,9 +72,15 @@ Route::get('/lembur/status/{id}', 'App\Http\Controllers\LemburController@show_ap
 Route::post('/lembur/status/update/{id}', 'App\Http\Controllers\LemburController@approval');
 Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
 
-Route::get('/log_kegiatan', 'App\Http\Controllers\LogKegiatanController@index');
+Route::get('/libur', 'App\Http\Controllers\LiburNasionalController@index');
+Route::get('/libur/create', 'App\Http\Controllers\LiburNasionalController@create');
+Route::post('/libur/create/store', 'App\Http\Controllers\LiburNasionalController@store');
+Route::get('/libur/{id}', 'App\Http\Controllers\LiburNasionalController@show');
+Route::post('/libur/update/{id}', 'App\Http\Controllers\LiburNasionalController@update');
 
-Route::post('/soap_data', 'App\Http\Controllers\SoapController@logAbsenStore');
+Route::get('/akumulasi_tahunan', 'App\Http\Controllers\AkumulasiTahunanController@index');
+
+Route::get('/log_kegiatan', 'App\Http\Controllers\LogKegiatanController@index');
 
 // Route::resource('cuti', CutiController::class);
 Route::get('/cuti', 'App\Http\Controllers\CutiController@index');
@@ -74,5 +89,11 @@ Route::post('/cuti/status/update/{id}', 'App\Http\Controllers\CutiController@app
 Route::get('/cuti/create', 'App\Http\Controllers\CutiController@create');
 Route::post('/cuti/create/store', 'App\Http\Controllers\CutiController@store');
 Route::get('/cuti/filter','App\Http\Controllers\CutiController@filter');
+
+Route::get('/role', 'App\Http\Controllers\RoleController@index');
+Route::get('/role/create', 'App\Http\Controllers\RoleController@create');
+Route::post('/role/create/store', 'App\Http\Controllers\RoleController@store');
+Route::get('/role/{id}', 'App\Http\Controllers\RoleController@show');
+Route::post('/role/update/{id}', 'App\Http\Controllers\RoleController@update');
 
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

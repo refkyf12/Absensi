@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\logKegiatan;
+use App\Models\Cuti;
+use App\Models\Lembur;
+use App\Models\logAbsen;
+use App\Models\LogActivity;
+use App\Models\JamKurang;
+use App\Models\Role;
+use App\Models\lebihKerja;
+use App\Models\AkumulasiTahunan;
 
 
 class UserController extends Controller
@@ -92,11 +100,10 @@ class UserController extends Controller
     {
         $karyawan = new User;
         $karyawan->id = $request->users_id;
-
         $karyawan->nama = $request->nama;
         $karyawan->email = $request->email;
         $pass_crypt = bcrypt($request->password);
-        $karyawan->role = $request->role;
+        $karyawan->role_id = $request->role_id;
         $karyawan->password = $pass_crypt;
 
         $karyawan->save();
@@ -144,13 +151,19 @@ class UserController extends Controller
     public function update(Request $request, int $users_id)
     {
         $data = User::find($users_id);
+        $lebihKerja = lebihKerja::find($users_id);
+        $cuti = Cuti::find($users_id);
         if ($request->password != ""){
-            $data->id = $request->users_id;
+            $data->id = $request->id;
+            // $lebihKerja->users_id = $request->id;
+            $cuti->users_id = $request->id;
             $data->nama = $request->nama;
             $data->email = $request->email;
             $pass_crypt = bcrypt($request->password);
             $data->password = $pass_crypt;
-            $data->role = $request->role;
+            $data->role_id = $request->role;
+            $cuti->update();
+            // $lebihKerja->update();
             $data->update();
 
             if (Auth::check())
@@ -198,13 +211,60 @@ class UserController extends Controller
     public function reset()
     {
 
+        $users = User::all();
+        date_default_timezone_set('Asia/Jakarta');
+        $date = date('Y-m-d H:i:s');
+
+        foreach ($users as $user) {
+            // Buat entri baru di tabel "akumulasitahunan" dengan data pengguna
+            AkumulasiTahunan::create([
+                'users_id' => $user->id,
+                'nama' => $user->nama,
+                'email' => $user->email,
+                'role_id' => $user->role_id,
+                'jam_lebih' => $user->jam_lebih,
+                'jam_kurang' => $user->jam_kurang,
+                'jam_lembur' => $user->jam_lembur,
+                'created_at' => $date,
+                // Masukkan field lainnya sesuai kebutuhan
+            
+            ]);
+
+            
+        }
+
+        foreach ($users as $user){
+            $roles = Role::find($user->role_id);
+            $user->sisa_cuti = $roles->sisa_cuti;
+            $user->save();
+
+           
+        }
         User::query()->update([
-            'sisa_cuti' => 12,
             'jam_lebih' => null,
             'jam_lembur' => null,
             'jam_kurang' => null,
-        ]);
+            ]);
+        
 
+        
+        
+
+        
+
+        if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $text = 'Melakukan Reset Pada Karyawan ';
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
+        
         return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
     }
 }

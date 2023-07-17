@@ -50,7 +50,7 @@
                         <input
                             type="date"
                             name="tanggal_awal"
-                            class="form-control"
+                            class="datepicker"
                             value="{{ isset($data)?$data->tanggal_awal:'' }}"
                         />
                     </div>
@@ -59,7 +59,7 @@
                         <input
                             type="date"
                             name="tanggal_akhir"
-                            class="form-control"
+                            class="datepicker"
                             value="{{ isset($data)?$data->tanggal_akhir:'' }}"
                         />
                     </div>
@@ -74,18 +74,23 @@
 </div>
  
 @endsection
- 
-@section('scripts')
- 
-<script type="text/javascript">
-    $(document).ready(function(){
- 
-        // btn refresh
-        $('.btn-refresh').click(function(e){
-            e.preventDefault();
-            $('.preloader').fadeIn();
-            location.reload();
-        })
- 
-    })
-</script>
+
+@push('scripts')
+    <script>
+        var nationalHolidays = @json($libur_nasional);
+        var disabledDates = [];
+        @foreach ($libur_nasional as $date)
+            disabledDates.push("{{ $date }}");
+        @endforeach
+
+        $('.datepicker').datepicker({
+            beforeShowDay: function(date) {
+                var stringDate = $.datepicker.formatDate('yy-mm-dd', date);
+                if ($.inArray(stringDate, disabledDates) != -1) {
+                    return [false];
+                }
+                return [true];
+            }
+        });
+    </script>
+@endpush

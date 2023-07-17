@@ -2,33 +2,27 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\lebihKerja;
 use App\Models\logAbsen;
 use App\Models\Role;
 use App\Models\logKegiatan;
-use App\Models\LogActivity;
 
-class User extends Authenticatable
+class AkumulasiTahunan extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
+    protected $table = 'akumulasi_tahunan';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'id',
+        'users_id',
         'nama',
         'email',
         'password',
         'role_id',
         'jam_lebih',
+        'created_at',
     ];
 
     /**
@@ -52,10 +46,6 @@ class User extends Authenticatable
 
     public function log_absen(){
         return $this->hasMany(logAbsen::class);
-    }
-
-    public function log_activity(){
-        return $this->hasMany(LogActivity::class);
     }
 
     public function log_kegiatan(){

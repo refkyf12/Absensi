@@ -59,24 +59,15 @@
                     </div>
                     <div class="form-group">
                         <label>Role</label>
-                        <input
-                            type="number"
-                            name="role"
-                            class="form-control"
-                            value="{{ isset($data)?$data->role:'' }}"
-                        />
-                    </div>
-                    <br>
-                    <!-- <div class="form-group">
-                        <label>Role</label>
                         <br>
-                        <select required name="role">
+                        <select required name="role_id">
                         <option value="">--pilih--</option>
+                        <option value=0>Karyawan</option>
                         <option value=1>Admin</option>
-                        <option value=2>HRD</option>
-                        <option value=3>Karyawan</option>
+                        <option value=2>Project Manager</option>
+                        <option value=2>HR</option>
                         </select>
-                    </div> -->
+                    </div>
                     <div style="text-align: center">
                         <button class="btn btn-success">Simpan</button>
                     </div>

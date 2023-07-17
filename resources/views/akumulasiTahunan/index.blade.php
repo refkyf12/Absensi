@@ -4,12 +4,11 @@
  
 <div class="row">
     <div class="col-md-12">
-        <h4>Karyawan</h4>
+        <h4>Akumulasi Tahunan</h4>
         <div class="box box-warning">
             <div class="box-header">
                 <p>
                     <button class="btn btn-sm btn-flat btn-warning btn-refresh"><i class="fa fa-refresh"></i> Refresh</button>
-                    <a href="/karyawan/create" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Tambah Data</a>
                 </p>
             </div>
             <div class="box-body">
@@ -27,6 +26,7 @@
                                 <th>Jam Lebih (Menit) </th>
                                 <th>Jam Kurang (Menit) </th>
                                 <th>Jam Lembur (Menit) </th>
+                                <th>Tanggal</th>
                                 <th class="not-export-col">Edit</th>
                             </tr>
                         </thead>
@@ -34,7 +34,7 @@
                             @foreach($data as $e=>$dt)
                                 <tr>
                                 <td>{{ $e+1 }}</td>
-                                <td>{{ $dt->id }}</td>
+                                <td>{{ $dt->users_id }}</td>
                                 <td>{{ $dt->nama }}</td>
                                 <td>{{ $dt->email }}</td>
                                 @if($dt->role_id == 0)
@@ -50,7 +50,9 @@
                                 <td>HR</td>
                                 @endif
                                 <td>
-                                {{$dt->sisa_cuti}}
+                                        @if ($dt->id)
+                                        {{$dt->role->sisa_cuti}}
+                                        @endif
                                 </td>
 
                                 @if($dt->jam_lebih == null || $dt->jam_lebih == 0)
@@ -73,7 +75,7 @@
                                 @if($dt->jam_lembur != null && $dt->jam_lembur >= 0)
                                 <td>{{ $dt->jam_lembur }}</td>
                                 @endif                
-                                
+                                <td>{{ $dt->created_at }}</td>
                                 <td>
                                     <div style="width:60px">
                                         <a href="/karyawan/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit" id="edit"><i class="fa fa-pencil-square-o"></i></a>
@@ -87,8 +89,6 @@
                         </tbody>
                     </table>
                 </div>
-                <a href="/reset" class="btn btn-sm btn-flat btn-Danger"><i class="fa fa-trash-o"></i> RESET</a>
-
             </div>
         </div>
     </div>

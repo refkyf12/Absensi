@@ -4,7 +4,7 @@
  
 <div class="row">
     <div class="col-md-12">
-        <h4>Edit Karyawan</h4>
+        <h4>{{ $title }}</h4>
         <div class="box box-warning">
             <div class="box-header">
                 <p>
@@ -17,58 +17,37 @@
                     class="border"
                     style="padding: 20px"
                     method="POST"
-                    action="/karyawan/update/{{ $data->id }}"
+                    action="{{ url('/role/create/store') }}"
                 >
                     @csrf
-                    <input type="hidden"/>
+                    <input type="hidden" name="_method" value="{{ $method }}" />
                     <div class="form-group">
-                        <label>NIP</label>
+                        <label>ID</label>
                         <input
                             type="string"
                             name="id"
                             class="form-control"
-                            value="{{ $data->id }}"
-                            readonly
+                            value="{{ isset($data)?$data->id:'' }}"
                         />
                     </div>
                     <div class="form-group">
-                        <label>Nama</label>
+                        <label>Nama Role</label>
                         <input
                             type="string"
-                            name="nama"
+                            name="nama_role"
                             class="form-control"
-                            value="{{ $data->nama}}"
+                            value="{{ isset($data)?$data->nama_role:'' }}"
                         />
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input
-                            type="string"
-                            name="email"
-                            class="form-control"
-                            value="{{ $data->email }}"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            class="form-control"
-                            value="{{ $data->password }}"
-                        />
-                    <div class="form-group">
-                        <label>Role (0-2)</label>
+                        <label>Cuti</label>
                         <input
                             type="number"
-                            name="role"
+                            name="sisa_cuti"
                             class="form-control"
-                            value="{{ $data->role_id }}"
+                            value="{{ isset($data)?$data->sisa_cuti:'' }}"
                         />
                     </div>
-                    @if($errors->any())
-                    <b style="color:red" >{{$errors->first()}}</b>
-                    @endif
                     <br>
                     <!-- <div class="form-group">
                         <label>Role</label>

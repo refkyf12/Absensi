@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cuti;
 use App\Models\User;
+use App\Models\liburNasional;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\logKegiatan;
@@ -33,16 +34,19 @@ class CutiController extends Controller
     }
 
     public function create(){
+        $libur_nasional = liburNasional::pluck('tanggal')->toArray();
         $users = DB::table('users')->get();
         return view('cuti.add_form_cuti', [
             'users' => $users,
             'title' => 'Tambah Cuti',
             'method' => 'POST',
             'action' => 'cuti'
-        ]);
+        ], compact('libur_nasional'));
     }
 
     public function store(Request $request){
+
+        $liburNasional = LiburNasional::pluck('tanggal')->toArray();
         $total = 0;
         $cutiData = new Cuti;
         $cutiData->users_id = $request->nama ;
@@ -50,15 +54,17 @@ class CutiController extends Controller
         $cutiData->tanggal_akhir = $request->tanggal_akhir;
         $currentDate = $request->tanggal_awal;
         $endDate = $request->tanggal_akhir;
-        while($currentDate <= $endDate){
-            $dayOfWeek = date('l', strtotime($currentDate));
-            $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
-            if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday"){
-                $total = $total + 1;
-            }
+        foreach($liburNasional as $items){
+                while($currentDate <= $endDate){
+                    $dayOfWeek = date('l', strtotime($currentDate));
+                    $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
+                    if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" && $currentDate != $items && $endDate != $items){
+                        $total = $total + 1;
+                    }
+                }
+                $cutiData->jumlah_hari = $total;
+                $cutiData->save();
         }
-        $cutiData->jumlah_hari = $total;
-        $cutiData->save();
 
         if (Auth::check())
                 {
@@ -103,6 +109,20 @@ class CutiController extends Controller
             $temp = $user->sisa_cuti - $data->jumlah_hari;
             $user->sisa_cuti = $temp;
             $user->update();
+            
+            if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $data = $user->nama;
+                    $text = 'Melakukan Approval Cuti Pada Karyawan ' . $data;
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
         }
 
         $data->update();
