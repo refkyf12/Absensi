@@ -22,7 +22,7 @@
         <div class="box box-warning">
             <div class="box-header">
                 <p>
-                    <a href="/soap_data" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>Test Soapphp</a>
+                    <a href="/soap_data/ambil" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i>Test Soapphp</a>
                 </p>
                 <div class="modal-dialog" role="document">
                     <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">

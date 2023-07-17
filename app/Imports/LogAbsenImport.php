@@ -11,9 +11,11 @@ use App\Models\logKegiatan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use App\Traits\jamKeInt;
 
 class LogAbsenImport implements ToCollection
 {
+    use jamKeInt;
 
     public function setBatasWaktu($batas){
 		$this->batas = $batas;
@@ -42,13 +44,11 @@ class LogAbsenImport implements ToCollection
     {
         //dd($rows);
         foreach ($rows as $row) {
-            //$temp = explode(" ",$row[3]);
-            //dd($temp[1]);
             $time = strtotime($row[3]);
             $newformat = date('Y-m-d',$time);
-            $keluar = strtotime($row[5]);
+            $keluar = $this->timeToInteger($row[5]);
             $masuk = $row[4];
-            $total = ($keluar - strtotime($masuk));
+            $total = ($keluar - $this->timeToInteger($masuk));
             //coba
             $totaljam = $total/3600;
             $totaljam = (int)$totaljam;
@@ -66,7 +66,7 @@ class LogAbsenImport implements ToCollection
             $totalWaktu = $totaljam.":".$totalmenit;
             //---
             $batas = $this->getBatasWaktu();
-            if (strtotime($masuk) > strtotime($batas))  {
+            if ($this->timeToInteger($masuk) > $this->timeToInteger($batas))  {
                 $statusTerlambat = true;
             }else{
                 $statusTerlambat = false;
@@ -83,26 +83,48 @@ class LogAbsenImport implements ToCollection
             ]);
 
             if ($total >= 28800){ //28800 = 8 jam
-                $totalLebih = (($keluar-1688947200)-(strtotime($masuk)-1688947200))-28800;
-                $jamKerjaLebih = $totalLebih;
-                $lebihForLembur = $totalLebih/60;
-                // --------------------------------------------------------------------------------------------------
                 $lembur = Lembur::where('users_id', $row[1])->where('tanggal', $newformat)->first();                
+
+                $jamMasuk = $this->timeToInteger($row[4])/60;
+                $jamKeluar = $this->timeToInteger($row[5])/60;
+                if($lembur != null){
+                    $jamAwalLembur = $this->timeToInteger($lembur->jam_awal)/60;
+                    $jamAkhirLembur = $this->timeToInteger($lembur->jam_akhir)/60;
+                }
+
+
+                //UBAH KE YANG BARU---------------------------------------------------------
+                $totalLebih = ($jamKeluar-$jamMasuk)-(28800/60);
+                $jamKerjaLebih = $totalLebih;
+                $lebihForLembur = $totalLebih;
+                // --------------------------------------------------------------------------------------------------
                 if($lembur != null){
                     if($lembur->status == 1){
-                        $lebihForLembur = $lebihForLembur - $lembur->jumlah_jam;
-                        $totalLebih = $lebihForLembur*60;
+                        $masukLebih1 = ($jamAwalLembur - ($jamMasuk+(28800/60)));//dari selesai jam kerja hingga jam awal lembur
+                        $lebihForLembur = $lebihForLembur - ($masukLebih1+$lembur->jumlah_jam);
+                        if($lebihForLembur <= 0){
+                            $lebihForLembur = 0;
+                        }
+
+                        $totalJamForLebih = $masukLebih1 + $lebihForLembur;
+                        //dd($totalJamForLebih);
+
+                    }else{
+                        $totalJamForLebih = $totalLebih;  
                     }
-                    //$newValue = $newValue - $lembur->jumlah_jam;
+                }else{
+                    $totalJamForLebih = $totalLebih;
                 }
                 //----------------------------------------------------------------------------------------------------------------
-                $totalJamForLebih = $totalLebih;
+                // lebih untuk user
+                //$totalJamForLebih = $totalLebih;
             
                 //----------------------------------------------------------------------------------------------------------------
-                $totalJamLebih = $jamKerjaLebih/3600;
+                //kodingan dibawah untuk tambah data ke lebihKerja
+                $totalJamLebih = $jamKerjaLebih/60;
                 $totalJamLebih = (int)$totalJamLebih;
             
-                $totalMenitLebih = ($jamKerjaLebih%3600)/60;
+                $totalMenitLebih = ($jamKerjaLebih%60);
             
                 if ($totalJamLebih / 10 < 1){
                     $totalJamLebih = "0".$totalJamLebih;
@@ -122,14 +144,16 @@ class LogAbsenImport implements ToCollection
                 //----------------------------------------------------------------------------------------------------------------
 
 
-                $newValue = $totalJamForLebih/60;
+                $newValue = $totalJamForLebih;
+                
 
                 // User::where('id', $row[1])->update(['jam_lebih' => $newValue]);
 
                 $user = User::find($row[1]);
                 $user->jam_lebih = $user->jam_lebih + $newValue;
                 $user->save();
-                
+                //UBAH KE YANG BARU---------------------------------------------------------
+
             }
             
             if ($total < 28800){

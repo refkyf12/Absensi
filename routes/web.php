@@ -9,6 +9,7 @@ use App\Http\Controllers\RulesController;
 use App\Http\Controllers\LogKegiatanController;
 use App\Http\Controllers\JamKurangController;
 use App\Http\Controllers\SoapController;
+use App\Http\Controllers\CutiController;
 
 
 /*
@@ -61,11 +62,13 @@ Route::get('/lembur/filter','App\Http\Controllers\LemburController@filter');
 Route::post('/lembur/create', 'App\Http\Controllers\LemburController@store');
 Route::get('/lembur/status/{id}', 'App\Http\Controllers\LemburController@show_approval');
 Route::post('/lembur/status/update/{id}', 'App\Http\Controllers\LemburController@approval');
+Route::get('/lembur/status/viewedit/{id}', 'App\Http\Controllers\LemburController@show_edit');
+Route::post('/lembur/status/edit/{id}', 'App\Http\Controllers\LemburController@edit');
 Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
 
 Route::get('/log_kegiatan', 'App\Http\Controllers\LogKegiatanController@index');
 
-Route::post('/soap_data', 'App\Http\Controllers\SoapController@logAbsenStore');
+Route::get('/soap_data/ambil', [SoapController::class, 'logAbsenStore']);//'App\Http\Controllers\SoapController@logAbsenStore');
 
 // Route::resource('cuti', CutiController::class);
 Route::get('/cuti', 'App\Http\Controllers\CutiController@index');

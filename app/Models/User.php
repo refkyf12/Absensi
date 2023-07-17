@@ -27,6 +27,8 @@ class User extends Authenticatable
         'password',
         'sisa_cuti',
         'jam_lebih',
+        'jam_kurang',
+        'jam_lembur',
     ];
 
     /**

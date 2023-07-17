@@ -38,8 +38,11 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>Tanggal Lembur</th>
-                                    <th>Lama Lembur (Menit) </th>
-                                    <th>Status </th>
+                                    <th>Lama Lembur</th>
+                                    <th>Jam Awal</th>
+                                    <th>Jam Akhir</th>
+                                    <th>Jam Keluar</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -50,20 +53,35 @@
 
                                     <td>
                                         @if ($dt->id)
-                                        {{$dt->User->nama}}
+                                        {{$dt->user_nama}}
                                         @endif
                                     </td>
                                     <td>{{ $dt->tanggal }}</td>
-                                    <td>{{ $dt->jumlah_jam }}</td>
-                                    <td>{{ $dt->status }}</td>
                                     <td>
+                                        {{ sprintf("%02d:%02d", intdiv($dt->jumlah_jam, 60), $dt->jumlah_jam % 60) }}
+                                    </td>
+                                    <td>{{ $dt->jam_awal }}</td>
+                                    <td>{{ $dt->jam_akhir }}</td>
+                                    <td>{{ $dt->jam_keluar }}</td>
+
+                                    @if($dt->status == 1)
+                                        <td>DISETUJUI</td>
+                                    @endif
+                                    @if($dt->status == 2)
+                                        <td>DITOLAK</td>
+                                    @endif
+                                    @if($dt->status == null)
+                                        <td>BELUM DI PROSES</td>
+                                    @endif
+                                    <td>
+                                        
                                         <div style="width:90px">
-                                            <a href="/delete_lembur/{{$dt->id}}" class="btn btn-danger btn-xs btn-edit"
-                                                id="edit"><i class="fa fa-trash-o"></i></a>
-                                        </div>
-                                        <div style="width:90px">
-                                            <a href="/lembur/status/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"
+                                            @if($dt->status == null)
+                                                <a href="/lembur/status/{{$dt->id}}" class="btn btn-success btn-xs btn-edit"
                                                 id="edit"><i class="fa fa-check"></i></a>
+                                            @endif
+                                                <a href="/lembur/status/viewedit/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"
+                                                id="edit"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </td>
 
