@@ -32,17 +32,6 @@
                         <button class="btn btn-success">Tambah Data Log absen</button>
                     </div>
                 </form>
-                <form
-                    class="border"
-                    style="padding: 20px"
-                    method="POST"
-                    action="{{ url('/soap_data_july') }}"
-                >
-                @csrf
-                <div style="text-align: center">
-                        <button class="btn btn-success">Tambah Data Log absen Juli</button>
-                    </div>
-                </form>
                 <div class="modal-dialog" role="document">
                     <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
                         <div class="modal-content">

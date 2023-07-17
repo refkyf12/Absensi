@@ -13,6 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LiburNasionalController;
 use App\Http\Controllers\AkumulasiTahunanController;
+use App\Http\Controllers\CutiController;
 
 
 /*
@@ -70,6 +71,8 @@ Route::get('/lembur/filter','App\Http\Controllers\LemburController@filter');
 Route::post('/lembur/create', 'App\Http\Controllers\LemburController@store');
 Route::get('/lembur/status/{id}', 'App\Http\Controllers\LemburController@show_approval');
 Route::post('/lembur/status/update/{id}', 'App\Http\Controllers\LemburController@approval');
+Route::get('/lembur/status/viewedit/{id}', 'App\Http\Controllers\LemburController@show_edit');
+Route::post('/lembur/status/edit/{id}', 'App\Http\Controllers\LemburController@edit');
 Route::get('/delete_lembur/{id}', 'App\Http\Controllers\LemburController@delete');
 
 Route::get('/libur', 'App\Http\Controllers\LiburNasionalController@index');

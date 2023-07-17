@@ -13,8 +13,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')->everyMinute();
-        // dailyAt('14:30')->timezone('Asia/Jakarta');
+        // $schedule->command('inspire')->hourly();
+        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')->dailyAt('13:00')->timezone('Asia/Jakarta');
     }
 
     /**

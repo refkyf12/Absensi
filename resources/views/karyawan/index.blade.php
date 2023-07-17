@@ -57,21 +57,22 @@
                                 <td>Tidak pernah lebih</td>
                                 @endif
                                 @if($dt->jam_lebih != null && $dt->jam_lebih >= 0)
-                                <td>{{ $dt->jam_lebih }}</td>
+                                <td>{{ sprintf("%02d Jam %0 2d Menit", intdiv($dt->jam_lebih, 60), $dt->jam_lebih%60 )}}</td>
+
                                 @endif
 
                                 @if($dt->jam_kurang == null || $dt->jam_kurang == 0)
                                 <td>Tidak pernah kurang</td>
                                 @endif
                                 @if($dt->jam_kurang != null && $dt->jam_kurang >= 0)
-                                <td>{{ $dt->jam_kurang }}</td>
+                                <td>{{ sprintf("%02d Jam %02d Menit", intdiv($dt->jam_kurang, 60), $dt->jam_kurang%60 )}}</td>
                                 @endif
 
                                 @if($dt->jam_lembur == null || $dt->jam_lembur == 0)
                                 <td>Tidak pernah lembur</td>
                                 @endif
                                 @if($dt->jam_lembur != null && $dt->jam_lembur >= 0)
-                                <td>{{ $dt->jam_lembur }}</td>
+                                <td>{{ sprintf("%02d Jam %02d Menit", intdiv($dt->jam_lembur, 60), $dt->jam_lembur%60 )}}</td>
                                 @endif                
                                 
                                 <td>
