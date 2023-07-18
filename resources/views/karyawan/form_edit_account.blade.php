@@ -28,7 +28,6 @@
                             name="id"
                             class="form-control"
                             value="{{ $data->id }}"
-                            readonly
                         />
                     </div>
                     <div class="form-group">

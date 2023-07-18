@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('jam_kurang', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             $table->unsignedBigInteger('absen_id');
-            $table->foreign('absen_id')->references('id')->on('log_absen');
+            $table->foreign('absen_id')->references('id')->on('log_absen')->onUpdate('cascade');
             $table->string('total_jam_kurang');
             $table->timestamps();
         });

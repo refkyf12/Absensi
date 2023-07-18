@@ -99,4 +99,8 @@ Route::post('/role/create/store', 'App\Http\Controllers\RoleController@store');
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@show');
 Route::post('/role/update/{id}', 'App\Http\Controllers\RoleController@update');
 
+Route::get('/akumulasi', 'App\Http\Controllers\LogAbsenController@indexAkumulasi');
+Route::get('/akumulasi/filter', 'App\Http\Controllers\LogAbsenController@akumulasiFilter');
+Route::get('/akumulasi/detail/{id}', 'App\Http\Controllers\LogAbsenController@showDetailLogAbsen');
+
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

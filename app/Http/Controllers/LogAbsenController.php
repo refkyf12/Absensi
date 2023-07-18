@@ -7,6 +7,7 @@ use App\Models\Rules;
 use Illuminate\Http\Request;
 use App\Imports\LogAbsenImport;
 use Session;
+use DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LogAbsenController extends Controller
@@ -109,5 +110,43 @@ class LogAbsenController extends Controller
         //dd($log_absen);
 
         return view('log_absen.LogAbsen', ['data'=>$log_absen]);
+    }
+
+    public function akumulasiFilter(Request $request){
+        $tanggalMulai = $request->input('tanggal_mulai');
+        $tanggalAkhir = $request->input('tanggal_akhir');
+
+        session(['tanggal_mulai' => $tanggalMulai, 'tanggal_akhir' => $tanggalAkhir]);
+
+        $data = logAbsen::whereBetween('tanggal', [$tanggalMulai, $tanggalAkhir])
+            ->select(
+                'users_id',
+                \DB::raw('SUM(TIME_TO_SEC(total_jam)) as total_kerja_seconds'),
+                \DB::raw('SUM(CASE WHEN keterlambatan = 1 THEN 1 ELSE 0 END) as total_keterlambatan')
+                )
+                ->groupBy('users_id')
+                ->get();
+            foreach ($data as $item) {
+                $totalSeconds = $item->total_kerja_seconds;
+                $hours = floor($totalSeconds / 3600);
+                $minutes = floor(($totalSeconds % 3600) / 60);
+                $item->total_kerja = sprintf('%02d:%02d', $hours, $minutes);
+            }
+        return view('AkumulasiLogAbsen.index', ['data'=>$data]);
+    }
+
+    public function indexAkumulasi(){
+        return view('AkumulasiLogAbsen.filter');
+    }
+
+    public function showDetailLogAbsen($id, Request $request){
+        $tanggalMulai = session('tanggal_mulai');
+        $tanggalAkhir = session('tanggal_akhir');
+
+        $dataDetail = logAbsen::where('users_id', $id)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalAkhir])
+            ->get();
+        
+        return view('AkumulasiLogAbsen.detail', compact('dataDetail'));
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('log_kegiatan', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             $table->string('kegiatan');
             $table->timestamps();
         });

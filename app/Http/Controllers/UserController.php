@@ -155,14 +155,11 @@ class UserController extends Controller
         $cuti = Cuti::find($users_id);
         if ($request->password != ""){
             $data->id = $request->id;
-            // $lebihKerja->users_id = $request->id;
-            $cuti->users_id = $request->id;
             $data->nama = $request->nama;
             $data->email = $request->email;
             $pass_crypt = bcrypt($request->password);
             $data->password = $pass_crypt;
             $data->role_id = $request->role;
-            $cuti->update();
             // $lebihKerja->update();
             $data->update();
 

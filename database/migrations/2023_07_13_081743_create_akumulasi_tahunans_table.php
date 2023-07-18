@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('akumulasi_tahunan', function (Blueprint $table) {
             $table->id();
+            $table->integer('users_id');
             $table->string('nama');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')->references('id')->on('role');
             $table->unsignedBigInteger('jam_lebih')->nullable();

@@ -63,8 +63,9 @@ class CutiController extends Controller
                     }
                 }
                 $cutiData->jumlah_hari = $total;
-                $cutiData->save();
         }
+        $cutiData->save();
+        
 
         if (Auth::check())
                 {
