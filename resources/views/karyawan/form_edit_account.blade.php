@@ -22,7 +22,7 @@
                     @csrf
                     <input type="hidden"/>
                     <div class="form-group">
-                        <label>NIP</label>
+                        <label>ID</label>
                         <input
                             type="string"
                             name="id"

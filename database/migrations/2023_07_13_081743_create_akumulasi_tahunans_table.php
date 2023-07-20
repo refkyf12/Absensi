@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('role');
+            $table->foreign('role_id')->references('id')->on('role')->onUpdate('cascade');
             $table->unsignedBigInteger('jam_lebih')->nullable();
             $table->unsignedBigInteger('jam_kurang')->nullable();
             $table->unsignedBigInteger('jam_lembur')->nullable();

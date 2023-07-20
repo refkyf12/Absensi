@@ -24,9 +24,9 @@
                                 <th>Email</th>
                                 <th>Role</th>
                                 <th>Sisa Cuti</th>
-                                <th>Jam Lebih (Menit) </th>
-                                <th>Jam Kurang (Menit) </th>
-                                <th>Jam Lembur (Menit) </th>
+                                <th>Jam Lebih</th>
+                                <th>Jam Kurang</th>
+                                <th>Jam Lembur</th>
                                 <th class="not-export-col">Edit</th>
                             </tr>
                         </thead>
@@ -78,9 +78,18 @@
                                 <td>
                                     <div style="width:60px">
                                         <a href="/karyawan/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit" id="edit"><i class="fa fa-pencil-square-o"></i></a>
-                                        @if($dt->jam_lembur != null && $dt->jam_lembur*60 <= $dt->jam_lebih)
-                                        <a href="/kurang/{{$dt->id}} "class="btn btn-danger btn-xs btn-hapus" id="delete"><i class="fa fa-trash-o"></i></a> 
-                                        @endif                                   
+                                        
+                                        <!-- <a href="/karyawan/lemburKeCuti/{{$dt->id}}"class="btn btn-danger btn-xs btn-hapus" id="delete"><i class="fa fa-trash-o"></i></a>  -->
+
+                                        <form
+                                            class="border"
+                                            method="POST"
+                                            action="/karyawan/lemburKeCuti/{{$dt->id}}"
+                                        >
+                                        @csrf
+                                        
+                                                <button class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash-o"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

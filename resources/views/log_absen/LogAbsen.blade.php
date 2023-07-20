@@ -86,6 +86,8 @@
                                 <th>Jam Keluar</th>
                                 <th>Total Jam Kerja</th>
                                 <th>Keterlambatan</th>
+                                <th>Deskripsi</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -100,13 +102,24 @@
                                 <td>{{$dt->tanggal}}</td>
                                 <td>{{$dt->jam_masuk}}</td>
                                 <td>{{$dt->jam_keluar}}</td>
-                                <td>{{$dt->total_jam}}</td>
+                                <td>
+                                    {{ sprintf("%02d:%02d", intdiv($dt->total_jam, 60), $dt->total_jam % 60) }}
+                                </td>
                                 @if($dt->keterlambatan == true)
                                 <td>Terlambat</td>
                                 @endif
                                 @if($dt->keterlambatan == false)
                                 <td>Tepat Waktu</td>
                                 @endif
+                                <td>{{$dt->deskripsi}}</td>
+
+                                <td>
+                                        
+                                        <div style="width:90px">
+                                                <a href="/log_absen/edit/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"
+                                                id="edit"><i class="fa fa-edit"></i></a>
+                                        </div>
+                                    </td>
                             </tr>
                             @endforeach
                         </tbody>

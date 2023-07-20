@@ -42,7 +42,8 @@
                                     <th>Jam Awal</th>
                                     <th>Jam Akhir</th>
                                     <th>Jam Keluar</th>
-                                    <th>Status</th>
+                                    <th>Status Kerja</th>
+                                    <th>Status Approval</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -63,6 +64,13 @@
                                     <td>{{ $dt->jam_awal }}</td>
                                     <td>{{ $dt->jam_akhir }}</td>
                                     <td>{{ $dt->jam_keluar }}</td>
+
+                                    @if($dt->status_kerja == 1)
+                                        <td>Di Kantor</td>
+                                    @endif
+                                    @if($dt->status_kerja == 2)
+                                        <td>Di Rumah</td>
+                                    @endif
 
                                     @if($dt->status == 1)
                                         <td>DISETUJUI</td>

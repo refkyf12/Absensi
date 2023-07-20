@@ -54,7 +54,15 @@
                                 <td>{{ $dt->tanggal_awal }}</td>
                                 <td>{{ $dt->tanggal_akhir }}</td>
                                 <td>{{ $dt->jumlah_hari }}</td>
-                                <td>{{ $dt->status }}</td>
+                                @if($dt->status == 1)
+                                        <td>DISETUJUI</td>
+                                    @endif
+                                    @if($dt->status == 2)
+                                        <td>DITOLAK</td>
+                                    @endif
+                                    @if($dt->status == null)
+                                        <td>BELUM DI PROSES</td>
+                                    @endif
                                 <td>
                                 <div style="width:90px">
                                             <a href="/cuti/status/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"

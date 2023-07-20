@@ -17,6 +17,7 @@ class Lembur extends Model
         'jam_awal',
         'jam_akhir',
         'jumlah_jam',
+        'status_kerja',
         'status',
     ];
 

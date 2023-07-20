@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\logKegiatan;
 use App\Models\Cuti;
 use App\Models\Lembur;
+use App\Models\Rules;
 use App\Models\logAbsen;
 use App\Models\LogActivity;
 use App\Models\JamKurang;
@@ -25,6 +26,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     public function getLamaKerja(){
+        $rules = Rules::where('key', "lama_kerja")->first();
+        $lamaKerja = $rules["value"];
+        return $lamaKerja;
+    }
 
     public function loginview()
     {
@@ -192,6 +199,24 @@ class UserController extends Controller
     {
         $data = User::find($users_id);
         $data -> delete();
+        return redirect('/karyawan')->with('msg', 'Data Berhasil di Hapus');
+    }
+
+    public function lemburKeCuti($users_id)
+    {
+        $data = User::find($users_id);
+        
+        if($data->jam_lembur >= ((int)$this->getLamaKerja())*60){
+            $temp = $data->jam_lembur / ((int)$this->getLamaKerja())*60;
+            $temp = (int)$temp;
+
+            $data->jam_lembur = $data->jam_lembur % ((int)$this->getLamaKerja())*60;
+            $data->sisa_cuti = $data->sisa_cuti + $temp;
+
+            $data->update();
+
+        }
+
         return redirect('/karyawan')->with('msg', 'Data Berhasil di Hapus');
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('jam_keluar');
             $table->string('total_jam');
             $table->boolean('keterlambatan');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
     }
