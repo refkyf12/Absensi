@@ -72,6 +72,18 @@
                             value="{{ isset($data)?$data->jam_akhir:'' }}"
                         />
                     </div>
+                    <div class="form-group">
+                        <label>Status kerja</label>
+                        <br>
+                        <label>
+                            <input type="radio" name="status_kerja" value="2"> Di rumah
+                        </label>
+                        <br>
+                        <label>
+                            <input type="radio" name="status_kerja" value="1"> Di kantor
+                        </label>
+                        <br>
+                    </div>
                     <div style="text-align: center">
                         <button class="btn btn-success">Simpan</button>
                     </div>

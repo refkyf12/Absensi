@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('lembur', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             $table->date('tanggal');
             $table->string('jam_awal');
             $table->string('jam_akhir');
             $table->integer('jumlah_jam');
+            $table->unsignedBigInteger('status_kerja')->nullable();
             $table->unsignedBigInteger('status')->nullable();
             $table->timestamps();
         });

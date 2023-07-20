@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cuti;
 use App\Models\User;
+use App\Models\Rules;
 use App\Models\liburNasional;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,11 @@ use App\Models\logKegiatan;
 
 class CutiController extends Controller
 {
+    public function getLamaKerja(){
+        $rules = Rules::where('key', "lama_kerja")->first();
+        $lamaKerja = $rules["value"];
+        return $lamaKerja;
+    }
     public function index(){
         $this->validate();
         $cuti = Cuti::with('User')->get();
@@ -46,6 +52,9 @@ class CutiController extends Controller
 
     public function store(Request $request){
 
+        $user = User::find($request->nama);
+        //dd($user);
+
         $liburNasional = LiburNasional::pluck('tanggal')->toArray();
         $total = 0;
         $cutiData = new Cuti;
@@ -63,8 +72,30 @@ class CutiController extends Controller
                     }
                 }
                 $cutiData->jumlah_hari = $total;
-                $cutiData->save();
+                
         }
+
+        $lamaKerja = $this->getLamaKerja();
+        $lamaKerja = (int)$lamaKerja;
+
+        if($user->jam_kurang > $user->jam_lebih){
+            $sisaCuti = $user->sisa_cuti;
+
+            $temp = $user->jam_kurang/($lamaKerja*60);
+            $temp = (int)$temp;
+
+            if($user->jam_kurang%($lamaKerja*60) > 0){
+                $temp = $temp + 1;
+            }
+
+            if($cutiData->jumlah_hari <= $sisaCuti-$temp){
+                $cutiData->save();
+            }
+
+        }else{
+            $cutiData->save();
+        }
+        
 
         if (Auth::check())
                 {

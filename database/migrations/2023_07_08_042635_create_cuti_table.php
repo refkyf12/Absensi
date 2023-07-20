@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cuti', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             $table->date('tanggal_awal');
             $table->date('tanggal_akhir');
             $table->integer('jumlah_hari');

@@ -19,6 +19,7 @@ class logAbsen extends Model
         'jam_keluar',
         'total_jam',
         'keterlambatan',
+        'deskripsi',
     ];
 
     public function users(){

@@ -22,13 +22,12 @@
                     @csrf
                     <input type="hidden"/>
                     <div class="form-group">
-                        <label>NIP</label>
+                        <label>ID</label>
                         <input
                             type="string"
                             name="id"
                             class="form-control"
                             value="{{ $data->id }}"
-                            readonly
                         />
                     </div>
                     <div class="form-group">

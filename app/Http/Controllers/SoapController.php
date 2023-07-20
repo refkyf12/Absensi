@@ -71,10 +71,10 @@ class SoapController extends Controller
 
         // $currentDate = getDatetimeNow();
 
-        //$yesterday = date('Y-m-d',strtotime("-1 days"));
+        $yesterday = date('Y-m-d',strtotime("-1 days"));
         //$e = 0;
 
-        $yesterday=date('2023-07-11');
+        //$yesterday=date('Y-m-d', strtotime(-1 days));
 
         //while($yesterday != '2023-07-01'){
         $absensi = [];
@@ -145,7 +145,7 @@ class SoapController extends Controller
 
                 $id = $logAbsen->id;
 
-                if ($total >= 28800){ //28800 = 8 jam
+                if ($total >= ((int)$this->getLamaKerja())*3600){ 
                     $lembur = Lembur::where('users_id', $item['id_karyawan'])->where('tanggal', $yesterday)->first();                
                     $jamMasuk = $this->timeToInteger($jamAwal)/60;
                     $jamKeluar = $this->timeToInteger($jamAkhir)/60;
@@ -156,13 +156,13 @@ class SoapController extends Controller
                     }
 
                     //UBAH KE YANG BARU---------------------------------------------------------
-                    $totalLebih = ($jamKeluar-$jamMasuk)-(28800/60);
+                    $totalLebih = ($jamKeluar-$jamMasuk)-(((int)$this->getLamaKerja())*60);
                     $jamKerjaLebih = $totalLebih;
                     $lebihForLembur = $totalLebih;
                     // --------------------------------------------------------------------------------------------------
                     if($lembur != null){
                         if($lembur->status == 1){
-                            $masukLebih1 = ($jamAwalLembur - ($jamMasuk+(28800/60)));//dari selesai jam kerja hingga jam awal lembur
+                            $masukLebih1 = ($jamAwalLembur - ($jamMasuk+(((int)$this->getLamaKerja())*60)));//dari selesai jam kerja hingga jam awal lembur
                             $lebihForLembur = $lebihForLembur - ($masukLebih1+$lembur->jumlah_jam);
                             if($lebihForLembur <= 0){
                                 $lebihForLembur = 0;
@@ -215,8 +215,8 @@ class SoapController extends Controller
                     
                 }
                 
-                if ($total < 28800){
-                    $totalKurang = 28800 - $total;
+                if ($total < ((int)$this->getLamaKerja())*3600){
+                    $totalKurang = ((int)$this->getLamaKerja())*3600 - $total;
                     $newValue = $totalKurang/60;
     
                     $totalJamForKurang = $totalKurang;

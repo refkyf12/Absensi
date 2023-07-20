@@ -44,6 +44,8 @@ Route::post('/logout', 'App\Http\Controllers\UserController@logout');
 Route::get('/logout', 'App\Http\Controllers\UserController@logout');
 //Route::get('log_absen', [LogAbsenController::class, 'index'])->name('log_absen.index');
 Route::get('/log_absen', 'App\Http\Controllers\LogAbsenController@index');
+Route::get('/log_absen/edit/{id}', 'App\Http\Controllers\LogAbsenController@show_edit');
+Route::post('/log_absen/edit/berhasil/{id}', 'App\Http\Controllers\LogAbsenController@edit');
 Route::get('/filter','App\Http\Controllers\LogAbsenController@filter');
 
 Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
@@ -55,6 +57,7 @@ Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@delete');
 Route::get('/karyawan/{id}', 'App\Http\Controllers\UserController@show');
 Route::post('/karyawan/update/{id}', 'App\Http\Controllers\UserController@update');
 Route::get('/kurang/{id}', 'App\Http\Controllers\UserController@lebihKurangLembur');
+Route::post('/karyawan/lemburKeCuti/{id}', 'App\Http\Controllers\UserController@lemburKeCuti');
 
 Route::get('/lebihKerja', 'App\Http\Controllers\LebihKerjaController@index');
 Route::get('/kurangKerja', 'App\Http\Controllers\JamKurangController@index');

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('log_activity', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->constrained()->onDelete('cascade')->references('id')->on('users');
+            $table->foreign('users_id')->constrained()->onUpdate('cascade')->references('id')->on('users');
             $table->date('tanggal');
             $table->time('jam_tapping');
             $table->timestamps();

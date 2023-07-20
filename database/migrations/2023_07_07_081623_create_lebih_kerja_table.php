@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('lebih_kerja', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             $table->unsignedBigInteger('absen_id');
             $table->foreign('absen_id')->references('id')->on('log_absen');
             $table->string('total_jam');

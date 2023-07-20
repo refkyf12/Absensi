@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\SoapController;
+use App\Models\liburNasional;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,8 +14,42 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')->dailyAt('13:00')->timezone('Asia/Jakarta');
+        $liburNasionalDates = LiburNasional::pluck('tanggal')->toArray();
+
+        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')
+            ->timezone('Asia/Jakarta')
+            ->weeklyOn(2, '15:51')
+            ->skip(function ($date) use ($liburNasionalDates){
+                return in_array($date->format('Y-m-d'), $liburNasionalDates);
+            });
+        
+        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')
+            ->timezone('Asia/Jakarta')
+            ->weeklyOn(3, '01:00')
+            ->skip(function ($date) use ($liburNasionalDates){
+                return in_array($date->format('Y-m-d'), $liburNasionalDates);
+            });
+
+        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')
+            ->timezone('Asia/Jakarta')
+            ->weeklyOn(4, '01:00')
+            ->skip(function ($date) use ($liburNasionalDates){
+                return in_array($date->format('Y-m-d'), $liburNasionalDates);
+            });
+
+        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')
+            ->timezone('Asia/Jakarta')
+            ->weeklyOn(5, '01:00')
+            ->skip(function ($date) use ($liburNasionalDates){
+                return in_array($date->format('Y-m-d'), $liburNasionalDates);
+            });
+
+        $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')
+            ->timezone('Asia/Jakarta')
+            ->weeklyOn(6, '01:00')
+            ->skip(function ($date) use ($liburNasionalDates){
+                return in_array($date->format('Y-m-d'), $liburNasionalDates);
+            });
     }
 
     /**

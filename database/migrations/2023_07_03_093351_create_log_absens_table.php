@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('log_absen', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             $table->date('tanggal');
             $table->time('jam_masuk');
             $table->time('jam_keluar');
             $table->string('total_jam');
             $table->boolean('keterlambatan');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
     }

@@ -8,7 +8,7 @@
 </style>
 <div class="row">
     <div class="col-md-12">
-        <h4>Edit Cuti</h4>
+        <h4>Edit Absen</h4>
         <div class="box box-warning">
             <div class="box-header">
                 <p>
@@ -21,7 +21,7 @@
                     class="border"
                     style="padding: 20px"
                     method="POST"
-                    action="/lembur/status/edit/{{$data->id}}"
+                    action="/log_absen/edit/berhasil/{{$data->id}}"
                 >
                     @csrf
                     <input type="hidden" name="_method" value="POST" />
@@ -32,28 +32,51 @@
                             type="text"
                             name="nama"
                             class="form-control"
-                            value="{{ isset($data)?$data->User->nama:'' }}"
+                            value="{{ isset($data)?$data->users->nama:'' }}"
                             readonly
                         />
                         </div>
                     </div>
+
+                    <div class="form-group" id="tanggal">
+                    <label for="tanggal">tanggal</label>
+                        <div class="input-group custom-input-group">
+                        <input
+                            type="text"
+                            name="tanggal"
+                            class="form-control"
+                            value="{{ isset($data)?$data->tanggal:'' }}"
+                            readonly
+                        />
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label>Jam Awal</label>
+                        <label>Jam Masuk</label>
 
                         <input
                             type="text"
-                            name="jam_awal"
+                            name="jam_masuk"
                             class="form-control"
-                            value="{{ isset($data)?$data->jam_awal:'' }}"
+                            value="{{ isset($data)?$data->jam_masuk:'' }}"
                         />
                     </div>
                     <div class="form-group">
-                        <label>Jam Akhir</label>
+                        <label>Jam Keluar</label>
                         <input
                             type="text"
-                            name="jam_akhir"
+                            name="jam_keluar"
                             class="form-control"
-                            value="{{ isset($data)?$data->jam_akhir:'' }}"
+                            value="{{ isset($data)?$data->jam_keluar:'' }}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <input
+                            type="text"
+                            name="deskripsi"
+                            class="form-control"
+                            value="{{ isset($data)?$data->deskripsi:'' }}"
                         />
                     </div>
                     <div style="text-align: center">
