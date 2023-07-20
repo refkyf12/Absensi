@@ -106,4 +106,5 @@ class LiburNasionalController extends Controller
             return redirect('/libur')->with('msg', 'Akun berhasil diperbarui');
             }
     }
+    
 }

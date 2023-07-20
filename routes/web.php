@@ -103,4 +103,8 @@ Route::get('/akumulasi', 'App\Http\Controllers\LogAbsenController@indexAkumulasi
 Route::get('/akumulasi/filter', 'App\Http\Controllers\LogAbsenController@akumulasiFilter');
 Route::get('/akumulasi/detail/{id}', 'App\Http\Controllers\LogAbsenController@showDetailLogAbsen');
 
+Route::get('/akumulasiLembur', 'App\Http\Controllers\LemburController@indexAkumulasiLembur');
+Route::get('/akumulasiLembur/filter', 'App\Http\Controllers\LemburController@akumulasiLembur');
+Route::get('/akumulasiLembur/detail/{id}', 'App\Http\Controllers\LemburController@showDetailLembur');
+
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

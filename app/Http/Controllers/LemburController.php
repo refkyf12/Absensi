@@ -282,4 +282,41 @@ class LemburController extends Controller
 
         return redirect('/lembur')->with('msg', 'Lembur berhasil di edit');
     }
+
+    public function akumulasiLembur(Request $request){
+        $tanggalMulai = $request->input('tanggal_mulai');
+        $tanggalAkhir = $request->input('tanggal_akhir');
+
+        session(['tanggal_mulai' => $tanggalMulai, 'tanggal_akhir' => $tanggalAkhir]);
+
+        $data = Lembur::where('status', 1)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalAkhir])
+            ->select(
+                'users_id',
+                \DB::raw('SUM(jumlah_jam) as total_jam'),
+                )
+                ->groupBy('users_id')
+                ->get();
+            foreach ($data as $item) {
+                $item->nama = $item->user->nama;
+            }
+
+        return view('AkumulasiLembur.index', compact('data'));
+    }
+
+    public function indexAkumulasiLembur(){
+        return view('AkumulasiLembur.filter');
+    }
+
+    public function showDetailLembur($id, Request $request){
+        $tanggalMulai = session('tanggal_mulai');
+        $tanggalAkhir = session('tanggal_akhir');
+
+        $dataDetail = Lembur::where('users_id', $id)
+            ->where('status', 1)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalAkhir])
+            ->get();
+        
+        return view('AkumulasiLembur.detail', compact('dataDetail'));
+    }
 }
