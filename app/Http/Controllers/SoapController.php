@@ -161,16 +161,47 @@ class SoapController extends Controller
                     $lebihForLembur = $totalLebih;
                     // --------------------------------------------------------------------------------------------------
                     if($lembur != null){
-                        if($lembur->status == 1){
-                            $masukLebih1 = ($jamAwalLembur - ($jamMasuk+(((int)$this->getLamaKerja())*60)));//dari selesai jam kerja hingga jam awal lembur
-                            $lebihForLembur = $lebihForLembur - ($masukLebih1+$lembur->jumlah_jam);
-                            if($lebihForLembur <= 0){
-                                $lebihForLembur = 0;
+                        $jamMasukKantor = $this->getBatasKerja();
+                        $jamMasukKantor = $this->timeToInteger($jamMasukKantor)/60;
+                        if($lembur->status == 1 && $lembur->status_kerja == 1){
+                            if($jamAwalLembur > ($jamMasuk+(((int)$this->getLamaKerja())*60))){
+                                $masukLebih1 = ($jamAwalLembur - ($jamMasuk+(((int)$this->getLamaKerja())*60)));//dari selesai jam kerja hingga jam awal lembur
+                                $lebihForLembur = $lebihForLembur - ($masukLebih1+$lembur->jumlah_jam);
+                                if($lebihForLembur <= 0){
+                                    $lebihForLembur = 0;
+                                }
+
+                                $totalJamForLebih = $masukLebih1 + $lebihForLembur;
                             }
-    
-                            $totalJamForLebih = $masukLebih1 + $lebihForLembur;
-                            //dd($totalJamForLebih);
-    
+
+                            if($jamAwalLembur <= $jamMasukKantor){
+                                $lebih1 = ($jamAwalLembur - $jamMasuk);
+
+                                if($lebih1 < 0){
+                                    $lebih1 = 0;
+                                }
+
+                                if($jamAkhirLembur > $jamMasuk){
+                                    $lebih2 = $jamMasukKantor - $jamAkhirLembur;
+                                }else{
+                                    $lebih2 = $jamAkhirLembur - $jamMasukKantor;
+                                }
+                                
+            
+                                if($lebih2 < 0){
+                                    $lebih2 = 0;
+                                }
+
+                                $lebihForLembur = $lebihForLembur - ($lebih1 + $lebih2 + $lembur->jumlah_jam);
+
+                                if($lebihForLembur < 0){
+                                    $lebihForLembur = 0;
+                                }
+
+                                $totalJamForLebih = $lebih1 + $lebih2 + $lebihForLembur;
+                            }
+                            
+
                         }else{
                             $totalJamForLebih = $totalLebih;  
                         }
