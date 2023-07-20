@@ -131,6 +131,7 @@ class LogAbsenController extends Controller
                 $hours = floor($totalSeconds / 3600);
                 $minutes = floor(($totalSeconds % 3600) / 60);
                 $item->total_kerja = sprintf('%02d:%02d', $hours, $minutes);
+                $item->nama = $item->users->nama;
             }
         return view('AkumulasiLogAbsen.index', ['data'=>$data]);
     }

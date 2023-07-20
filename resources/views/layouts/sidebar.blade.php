@@ -7,6 +7,7 @@
         @if(\Auth::user()->role_id == 1)
         <li class="menu-sidebar"><a href="{{ url('/karyawan') }}"><span class="fa fa-firefox"></span>Karyawan</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/log_absen') }}"><span class="fa fa-firefox"></span>Absen</span></a></li>
+        <li class="menu-sidebar"><a href="{{ url('/absen_non_kerja') }}"><span class="fa fa-firefox"></span>Absen (Non Hari Kerja)</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/akumulasi') }}"><span class="fa fa-firefox"></span>Akumulasi Absen</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/akumulasiLembur') }}"><span class="fa fa-firefox"></span>Akumulasi Lembur</span></a></li>
         <li class="menu-sidebar"><a href="{{ url('/lebihKerja') }}"><span class="fa fa-firefox"></span>Jam Kerja Lebih</span></a></li>

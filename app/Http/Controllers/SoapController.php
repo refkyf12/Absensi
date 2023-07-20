@@ -22,6 +22,7 @@ use App\Models\Rules;
 use App\Models\JamKurang;
 use App\Http\Controllers\TADFactory;
 use App\Traits\jamKeInt;
+use App\Models\liburNasional;
 
 
 class SoapController extends Controller
@@ -252,4 +253,5 @@ class SoapController extends Controller
         
         return redirect('/log_absen')->with('msg', 'Tambah akun berhasil');
     }
+
 }

@@ -12,6 +12,7 @@ use App\Models\logAbsen;
 use App\Models\Role;
 use App\Models\logKegiatan;
 use App\Models\LogActivity;
+use App\Models\absenNonKerja;
 
 class User extends Authenticatable
 {
@@ -54,6 +55,10 @@ class User extends Authenticatable
 
     public function log_absen(){
         return $this->hasMany(logAbsen::class);
+    }
+
+    public function absen_non_kerja(){
+        return $this->hasMany(absenNonKerja::class);
     }
 
     public function log_activity(){

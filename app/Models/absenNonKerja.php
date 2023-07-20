@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Models\liburNasional;
-use App\Models\lebihKerja;
 
-class logAbsen extends Model
+class absenNonKerja extends Model
 {
-    protected $table = 'log_absen';
+    use HasFactory;
+
+    protected $table = 'absen_non_kerja';
 
     protected $fillable = [
         'id',
@@ -24,14 +24,5 @@ class logAbsen extends Model
 
     public function users(){
         return $this->belongsTo(User::class);
-    }
-
-    public function lebihKerja(){
-        return $this->hasOne(lebihKerja::class);
-    }
-
-    public function liburNasional()
-    {
-        return $this->belongsTo(liburNasional::class, 'tanggal', 'tanggal');
     }
 }

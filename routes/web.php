@@ -14,6 +14,7 @@ use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LiburNasionalController;
 use App\Http\Controllers\AkumulasiTahunanController;
 use App\Http\Controllers\CutiController;
+use App\Http\Controllers\AbsenNonKerjaController;
 
 
 /*
@@ -33,6 +34,7 @@ Route::get('/', function () {
 
 Route::post('/soap_activity', 'App\Http\Controllers\LogActivityController@store');
 Route::post('/soap_data', 'App\Http\Controllers\SoapController@logAbsenStore');
+Route::post('/soap_non_kerja', 'App\Http\Controllers\AbsenNonKerjaController@logAbsenNonKerja');
 Route::post('/soap_data_july', 'App\Http\Controllers\SoapController@getJulyData');
 Route::get('/log_activity', 'App\Http\Controllers\LogActivityController@index');
 
@@ -45,6 +47,8 @@ Route::get('/logout', 'App\Http\Controllers\UserController@logout');
 //Route::get('log_absen', [LogAbsenController::class, 'index'])->name('log_absen.index');
 Route::get('/log_absen', 'App\Http\Controllers\LogAbsenController@index');
 Route::get('/filter','App\Http\Controllers\LogAbsenController@filter');
+
+Route::get('/absen_non_kerja', 'App\Http\Controllers\AbsenNonKerjaController@index');
 
 Route::post('/log_absen/import_excel', 'App\Http\Controllers\LogAbsenController@import_excel');
 

@@ -4,19 +4,30 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h4>Akumulasi Absen</h4>
+        <h4>Log Absen Non Kerja</h4>
         <div class="box box-warning">
             <div class="box-header">
+                <form
+                    class="border"
+                    style="padding: 20px"
+                    method="POST"
+                    action="{{ url('/soap_non_kerja') }}"
+                >
+                @csrf
+                <div style="text-align: center">
+                        <button class="btn btn-success">Tambah Data Log Absen (Non Hari Kerja)</button>
+                    </div>
+                </form>
                 <div class="box-body">
-                    <form method="GET" action="/akumulasi/filter">
+                    <form method="GET" action="/filter">
                         <div class="form-group">
                             <label for="tanggal-filter-start">Tanggal Awal:</label>
-                            <input type="date" id="tanggal_mulai" name="tanggal_mulai" class="form-control">
+                            <input type="date" name="start_date" class="form-control">
                         </div>
 
                         <div class="form-group">
                             <label for="tanggal-filter-end">Tanggal Akhir:</label>
-                            <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control">
+                            <input type="date" name="end_date" class="form-control">
                         </div>
                         <div class="col-md-3">
                             <button type="submit" class="btn btn-primary">Filter</button>
@@ -30,11 +41,11 @@
                             <tr>
                                 <th>User ID</th>
                                 <th>Nama</th>
-                                <th>Tanggal Awal</th>
-                                <th>Tanggal Akhir</th>
+                                <th>Tanggal</th>
+                                <th>Jam Masuk</th>
+                                <th>Jam Keluar</th>
                                 <th>Total Jam Kerja</th>
                                 <th>Keterlambatan</th>
-                                <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,20 +53,20 @@
                             <tr>
                                 <td>{{$dt->users_id}}</td>
                                 <td>
-                                    {{$dt->nama}}
+                                    @if ($dt->id)
+                                    {{$dt->users->nama}}
+                                    @endif
                                 </td>
-                                <td>{{request('tanggal_mulai')}}</td>
-                                <td>{{request('tanggal_akhir')}}</td>
-                                <td>{{$dt->total_kerja}}</td>
-                                <td>{{$dt->total_keterlambatan}}</td>
-                                <td>
-                                <td>
-                                <form class="border"
-                                method="GET"
-                                action="/akumulasi/detail/{{$dt->users_id}}">
-                                    <button type="submit">Lihat Detail</button>
-                                </form>
-                                </td>
+                                <td>{{$dt->tanggal}}</td>
+                                <td>{{$dt->jam_masuk}}</td>
+                                <td>{{$dt->jam_keluar}}</td>
+                                <td>{{$dt->total_jam}}</td>
+                                @if($dt->keterlambatan == true)
+                                <td>Terlambat</td>
+                                @endif
+                                @if($dt->keterlambatan == false)
+                                <td>Tepat Waktu</td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
