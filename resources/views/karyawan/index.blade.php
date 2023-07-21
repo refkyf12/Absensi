@@ -90,7 +90,19 @@
                                         
                                                 <button class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash-o"></i></button>
                                         </form>
+
+                                        <form
+                                            class="border"
+                                            method="POST"
+                                            action="/karyawan/cutiKurang/{{$dt->id}}"
+                                        >
+                                        @csrf
+                                        
+                                                <button class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash-o">CUTI</i></button>
+                                        </form>
                                     </div>
+
+                                    
                                 </td>
                             </tr>
                             @endforeach

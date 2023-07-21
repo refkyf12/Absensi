@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $liburNasionalDates = LiburNasional::pluck('tanggal')->toArray();
+        dd(1);
 
         $schedule->call('App\Http\Controllers\SoapController@logAbsenStore')
             ->timezone('Asia/Jakarta')

@@ -58,6 +58,7 @@ Route::get('/karyawan/{id}', 'App\Http\Controllers\UserController@show');
 Route::post('/karyawan/update/{id}', 'App\Http\Controllers\UserController@update');
 Route::get('/kurang/{id}', 'App\Http\Controllers\UserController@lebihKurangLembur');
 Route::post('/karyawan/lemburKeCuti/{id}', 'App\Http\Controllers\UserController@lemburKeCuti');
+Route::post('/karyawan/cutiKurang/{id}', 'App\Http\Controllers\UserController@cutiKurangJamKurang');
 
 Route::get('/lebihKerja', 'App\Http\Controllers\LebihKerjaController@index');
 Route::get('/kurangKerja', 'App\Http\Controllers\JamKurangController@index');

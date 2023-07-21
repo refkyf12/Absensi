@@ -105,7 +105,24 @@ class LogAbsenController extends Controller
 
                     $data->jam_masuk = $request->jam_masuk;
                     $data->jam_keluar = $request->jam_keluar;
-                    $data->total_jam = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk)) / 60;
+                    $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+
+                    $totalJamLebih = $temp/60;
+                    $totalJamLebih = (int)$totalJamLebih;
+
+                    $totalMenitLebih = ($temp%60);
+                
+                    if ($totalJamLebih / 10 < 1){
+                        $totalJamLebih = "0".$totalJamLebih;
+                    }
+                
+                    if ($totalMenitLebih / 10 < 1){
+                        $totalMenitLebih = "0".$totalMenitLebih;
+                    }
+                    $temp = $totalJamLebih.":".$totalMenitLebih;
+
+
+                    $data->total_jam = $temp;
 
                     if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
                         $data->keterlambatan = 1;
@@ -191,7 +208,24 @@ class LogAbsenController extends Controller
                     //-----------------------------------------------------------------
                     $data->jam_masuk = $request->jam_masuk;
                     $data->jam_keluar = $request->jam_keluar;
-                    $data->total_jam = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk)) / 60;
+                    $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+
+                    $totalJamLebih = $temp/60;
+                    $totalJamLebih = (int)$totalJamLebih;
+
+                    $totalMenitLebih = ($temp%60);
+                
+                    if ($totalJamLebih / 10 < 1){
+                        $totalJamLebih = "0".$totalJamLebih;
+                    }
+                
+                    if ($totalMenitLebih / 10 < 1){
+                        $totalMenitLebih = "0".$totalMenitLebih;
+                    }
+                    $temp = $totalJamLebih.":".$totalMenitLebih;
+
+
+                    $data->total_jam = $temp;
 
                     if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
                         $data->keterlambatan = 1;
@@ -250,7 +284,24 @@ class LogAbsenController extends Controller
             }else{
                 $data->jam_masuk = $request->jam_masuk;
                 $data->jam_keluar = $request->jam_keluar;
-                $data->total_jam = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk)) / 60;
+                $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+
+                $totalJamLebih = $temp/60;
+                $totalJamLebih = (int)$totalJamLebih;
+
+                $totalMenitLebih = ($temp%60);
+            
+                if ($totalJamLebih / 10 < 1){
+                    $totalJamLebih = "0".$totalJamLebih;
+                }
+            
+                if ($totalMenitLebih / 10 < 1){
+                    $totalMenitLebih = "0".$totalMenitLebih;
+                }
+                $temp = $totalJamLebih.":".$totalMenitLebih;
+
+
+                $data->total_jam = $temp;
 
                 if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
                     $data->keterlambatan = 1;
@@ -264,7 +315,24 @@ class LogAbsenController extends Controller
         }else{
             $data->jam_masuk = $request->jam_masuk;
             $data->jam_keluar = $request->jam_keluar;
-            $data->total_jam = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk)) / 60;
+            $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+
+                $totalJamLebih = $temp/60;
+                $totalJamLebih = (int)$totalJamLebih;
+
+                $totalMenitLebih = ($temp%60);
+            
+                if ($totalJamLebih / 10 < 1){
+                    $totalJamLebih = "0".$totalJamLebih;
+                }
+            
+                if ($totalMenitLebih / 10 < 1){
+                    $totalMenitLebih = "0".$totalMenitLebih;
+                }
+                $temp = $totalJamLebih.":".$totalMenitLebih;
+
+
+                $data->total_jam = $temp;
 
             if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
                 $data->keterlambatan = 1;

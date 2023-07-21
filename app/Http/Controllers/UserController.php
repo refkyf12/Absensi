@@ -292,4 +292,21 @@ class UserController extends Controller
         
         return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
     }
+
+    public function cutiKurangJamKurang($id){
+        $data = User::find($id);
+
+        $temp = $data->jam_kurang - $data->jam_lebih;
+
+        $lamaKerja = $this->getLamaKerja();
+
+        if($temp >= ($lamaKerja*60)){
+            $data->jam_kurang = $data->jam_kurang - ($lamaKerja*60);
+
+            $data->sisa_cuti = $data->sisa_cuti - 1;
+
+            $data->update();
+        }
+        return redirect('/karyawan')->with('msg', 'Data Berhasil di Hapus');
+    }
 }
