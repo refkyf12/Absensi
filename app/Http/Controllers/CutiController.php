@@ -77,26 +77,26 @@ class CutiController extends Controller
         $cutiData->save();
         
 
-        $lamaKerja = $this->getLamaKerja();
-        $lamaKerja = (int)$lamaKerja;
+        // $lamaKerja = $this->getLamaKerja();
+        // $lamaKerja = (int)$lamaKerja;
 
-        if($user->jam_kurang > $user->jam_lebih){
-            $sisaCuti = $user->sisa_cuti;
+        // if($user->jam_kurang > $user->jam_lebih){
+        //     $sisaCuti = $user->sisa_cuti;
 
-            $temp = $user->jam_kurang/($lamaKerja*60);
-            $temp = (int)$temp;
+        //     $temp = $user->jam_kurang/($lamaKerja*60);
+        //     $temp = (int)$temp;
 
-            if($user->jam_kurang%($lamaKerja*60) > 0){
-                $temp = $temp + 1;
-            }
+        //     if($user->jam_kurang%($lamaKerja*60) > 0){
+        //         $temp = $temp + 1;
+        //     }
 
-            if($cutiData->jumlah_hari <= $sisaCuti-$temp){
-                $cutiData->save();
-            }
+        //     if($cutiData->jumlah_hari <= $sisaCuti-$temp){
+        //         $cutiData->save();
+        //     }
 
-        }else{
-            $cutiData->save();
-        }
+        // }else{
+        //     $cutiData->save();
+        // }
         
 
         if (Auth::check())

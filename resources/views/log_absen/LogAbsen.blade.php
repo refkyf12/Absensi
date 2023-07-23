@@ -103,7 +103,7 @@
                                 <td>{{$dt->jam_masuk}}</td>
                                 <td>{{$dt->jam_keluar}}</td>
                                 <td>
-                                    {{ sprintf("%02d:%02d", intdiv($dt->total_jam, 60), $dt->total_jam % 60) }}
+                                    {{$dt->total_jam}}
                                 </td>
                                 @if($dt->keterlambatan == true)
                                 <td>Terlambat</td>
