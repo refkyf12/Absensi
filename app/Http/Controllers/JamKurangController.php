@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\JamKurang;
 use Illuminate\Http\Request;
+use Exception;
 
 class JamKurangController extends Controller
 {

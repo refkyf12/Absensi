@@ -5,12 +5,25 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Lembur</h4>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="box box-warning">
             <div class="box-header">
+            @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                 <p>
                     <a href="/lembur/create" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Tambah
                         Data</a>
                 </p>
+                @endif
                 <div class="box-body">
                     <form method="GET" action="/lembur/filter">
                         <div class="form-group">
@@ -44,7 +57,9 @@
                                     <th>Jam Keluar</th>
                                     <th>Status Kerja</th>
                                     <th>Status Approval</th>
+                                    @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                                     <th>Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,6 +96,7 @@
                                     @if($dt->status == null)
                                         <td>BELUM DI PROSES</td>
                                     @endif
+                                    @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                                     <td>
                                         
                                         <div style="width:90px">
@@ -92,7 +108,7 @@
                                                 id="edit"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </td>
-
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>

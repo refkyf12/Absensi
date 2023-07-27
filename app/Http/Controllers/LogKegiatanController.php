@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LogKegiatan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Exception;
 
 class LogKegiatanController extends Controller
 {

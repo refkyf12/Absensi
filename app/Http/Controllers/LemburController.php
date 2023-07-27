@@ -12,6 +12,7 @@ use App\Traits\jamKeInt;
 use DB;
 use App\Models\logKegiatan;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 
 class LemburController extends Controller
@@ -44,8 +45,6 @@ class LemburController extends Controller
             ->get();
 
         // dd($lembur);
-
-        
         if (request()->segment(1) == 'api') return response()->json([
             "error"=>false,
             "list"=>$lembur,
@@ -65,7 +64,8 @@ class LemburController extends Controller
     }
 
     public function store(Request $request){
-        $lemburData = new Lembur;
+        try{
+            $lemburData = new Lembur;
         $lemburData->users_id = $request->nama ;
         $lemburData->tanggal = $request->tanggal;
         $lemburData->jam_awal = $request->jam_awal;
@@ -105,7 +105,12 @@ class LemburController extends Controller
         // $user->jam_lebih = $user->jam_lebih - ($request->jumlah_jam*60); // Subtract $newValue from the old value
         // $user->save();
 
-        return redirect('/lembur')->with('msg', 'Data berhasil di hapus');
+        return redirect('/lembur')->with('success', 'Data berhasil di tambah');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/lembur')->with('msg', 'Data gagal di tambah. Error : ' . $errorMessage);
+        }
+        
     }
 
     public function delete($id){
@@ -132,7 +137,8 @@ class LemburController extends Controller
     }
     public function approval($id, Request $request)
     {
-        $data = Lembur::find($id);
+        try{
+            $data = Lembur::find($id);
         $data->status = $request->status;
         $totalJamLembur = $data->jumlah_jam;        
         
@@ -216,7 +222,12 @@ class LemburController extends Controller
         }
 
         $data->update();
-        return redirect('/lembur')->with('msg', 'data lembur berhasil diperbarui');
+        return redirect('/lembur')->with('success', 'Data lembur berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/lembur')->with('error', 'Data lembur gagal diperbarui. Error : ' . $errorMessage);
+        }
+        
         
     }
 
@@ -228,7 +239,8 @@ class LemburController extends Controller
 
 
     public function edit($id, Request $request){
-        $data = Lembur::find($id);
+        try{
+            $data = Lembur::find($id);
         $logAbsen = LogAbsen::where('tanggal', $data->tanggal)->where('users_id', $data->users_id)->first();
         $user = User::find($data->users_id);
 
@@ -431,7 +443,12 @@ class LemburController extends Controller
             $data->update();
         }   
 
-        return redirect('/lembur')->with('msg', 'Lembur berhasil di edit');
+        return redirect('/lembur')->with('success', 'Data berhasil di edit');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/lembur')->with('error', 'Data gagal di edit. Error : ' . $errorMessage);
+        }
+        
     }
 
     public function akumulasiLembur(Request $request){

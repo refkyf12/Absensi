@@ -60,7 +60,11 @@ class LogAbsenImport implements ToCollection
             $time = strtotime($row[3]);
             $newformat = date('Y-m-d',$time);
             $keluar = $this->timeToInteger($row[5]);
+            if($keluar == null){
+                dd($row);
+            }
             $masuk = $row[4];
+            
             $total = ($keluar - $this->timeToInteger($masuk));
             //coba
             $totaljam = $total/3600;
@@ -79,7 +83,9 @@ class LogAbsenImport implements ToCollection
             $totalWaktu = $totaljam.":".$totalmenit;
             //---
             $batas = $this->getBatasWaktu();
-            if ($this->timeToInteger($masuk) > $this->timeToInteger($batas))  {
+            $lamaBekerja = $this->getLamaKerja();
+            $lamaBekerja = $lamaBekerja * 60;
+            if ($total < $lamaBekerja)  {
                 $statusTerlambat = true;
             }else{
                 $statusTerlambat = false;
@@ -230,7 +236,9 @@ class LogAbsenImport implements ToCollection
                 $user->jam_kurang = $user->jam_kurang + $newValue;
                 $user->save();
             }
+            
         }
+        
 
         if (Auth::check())
                 {

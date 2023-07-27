@@ -5,11 +5,24 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Karyawan</h4>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="box box-warning">
             <div class="box-header">
                 <p>
                     <button class="btn btn-sm btn-flat btn-warning btn-refresh"><i class="fa fa-refresh"></i> Refresh</button>
+                    @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                     <a href="/karyawan/create" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Tambah Data</a>
+                    @endif
                 </p>
             </div>
             <div class="box-body">
@@ -27,7 +40,9 @@
                                 <th>Jam Lebih</th>
                                 <th>Jam Kurang</th>
                                 <th>Jam Lembur</th>
-                                <th class="not-export-col">Edit</th>
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
+                                <th class="not-export-col">Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -48,6 +63,9 @@
                                 @endif
                                 @if($dt->role_id == 3)
                                 <td>HR</td>
+                                @endif
+                                @if($dt->role_id == 4)
+                                <td>Administrasi</td>
                                 @endif
                                 <td>
                                 {{$dt->sisa_cuti}}
@@ -75,9 +93,10 @@
                                 <td>{{ sprintf("%02d Jam %02d Menit", intdiv($dt->jam_lembur, 60), $dt->jam_lembur%60 )}}</td>
                                 @endif                
                                 
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                                 <td>
                                     <div style="width:60px">
-                                        <a href="/karyawan/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit" id="edit"><i class="fa fa-pencil-square-o"></i></a>
+                                        <a href="/karyawan/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit" id="edit"><i class="fa fa-pencil-square-o">Edit</i></a>
                                         
                                         <!-- <a href="/karyawan/lemburKeCuti/{{$dt->id}}"class="btn btn-danger btn-xs btn-hapus" id="delete"><i class="fa fa-trash-o"></i></a>  -->
 
@@ -88,10 +107,21 @@
                                         >
                                         @csrf
                                         
-                                                <button class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash-o"></i></button>
+                                                <button class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash-o">Lembur</i></button>
+                                        </form>
+
+                                        <form
+                                            class="border"
+                                            method="POST"
+                                            action="/karyawan/kurangKurangCuti/{{$dt->id}}"
+                                        >
+                                        @csrf
+                                        
+                                                <button class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash-o">Cuti</i></button>
                                         </form>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

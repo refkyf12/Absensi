@@ -63,6 +63,15 @@
                             value="{{ isset($data)?$data->tanggal_akhir:'' }}"
                         />
                     </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <input
+                            type="text"
+                            name="deskripsi"
+                            class="text"
+                            value="{{ isset($data)?$data->deskripsi:'' }}"
+                        />
+                    </div>
                     <div style="text-align: center">
                         <button class="btn btn-success">Simpan</button>
                     </div>

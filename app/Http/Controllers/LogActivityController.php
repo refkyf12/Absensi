@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\Rules;
 use App\Models\JamKurang;
 use App\Http\Controllers\TADFactory;
+use Exception;
 
 class LogActivityController extends Controller
 {
@@ -41,7 +42,8 @@ class LogActivityController extends Controller
      */
     public function store(Request $request)
     {
-        $logger = new Logger('soap-service');
+        try{
+            $logger = new Logger('soap-service');
         $logger->pushHandler(new StreamHandler(__DIR__.'/logs/'.date( "Y-m-d").'.log', Logger::DEBUG));
         $logger->pushHandler(new FirePHPHandler());
         $tad = (new TADFactory((['ip'=> '10.50.0.60', 'com_key'=>0])))->get_instance();
@@ -68,7 +70,12 @@ class LogActivityController extends Controller
 
             
         }
-        return redirect('/log_activity')->with('msg', 'Tambah akun berhasil');
+        return redirect('/log_activity')->with('success', 'Berhasil mengambil data');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/log_activity')->with('error', 'Gagal mengambil data. Error : ' . $errorMessage);
+        }
+        
     }
 
     /**

@@ -57,13 +57,16 @@
                             value="{{ $data->password }}"
                         />
                     <div class="form-group">
-                        <label>Role (0-2)</label>
-                        <input
-                            type="number"
-                            name="role"
-                            class="form-control"
-                            value="{{ $data->role_id }}"
-                        />
+                        <label>Role</label>
+                        <br>
+                        <select required name="role_id">
+                        <option value="">--pilih--</option>
+                        <option value=0>Karyawan</option>
+                        <option value=1>Admin</option>
+                        <option value=2>Project Manager</option>
+                        <option value=3>HR</option>
+                        <option value=4>Administrasi</option>
+                        </select>
                     </div>
                     @if($errors->any())
                     <b style="color:red" >{{$errors->first()}}</b>

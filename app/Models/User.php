@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\logKegiatan;
 use App\Models\LogActivity;
 use App\Models\absenNonKerja;
+use App\Models\Ketidakhadiran;
 
 class User extends Authenticatable
 {
@@ -83,5 +84,9 @@ class User extends Authenticatable
 
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+
+    public function ketidakhadiran(){
+        return $this->hasMany(Ketidakhadiran::class);
     }
 }

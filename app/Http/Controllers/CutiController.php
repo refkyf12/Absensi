@@ -10,6 +10,7 @@ use App\Models\liburNasional;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\logKegiatan;
+use Exception;
 
 class CutiController extends Controller
 {
@@ -51,8 +52,8 @@ class CutiController extends Controller
     }
 
     public function store(Request $request){
-
-        $user = User::find($request->nama);
+        try{
+            $user = User::find($request->nama);
         //dd($user);
 
         $liburNasional = LiburNasional::pluck('tanggal')->toArray();
@@ -63,40 +64,41 @@ class CutiController extends Controller
         $cutiData->tanggal_akhir = $request->tanggal_akhir;
         $currentDate = $request->tanggal_awal;
         $endDate = $request->tanggal_akhir;
-        foreach($liburNasional as $items){
-                while($currentDate <= $endDate){
-                    $dayOfWeek = date('l', strtotime($currentDate));
-                    $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
-                    if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" && $currentDate != $items && $endDate != $items){
-                        $total = $total + 1;
+
+        //dd($liburNasional == null);
+        if($liburNasional != null){
+            foreach($liburNasional as $items){
+                    while($currentDate <= $endDate){
+                        $dayOfWeek = date('l', strtotime($currentDate));
+                        $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
+                        if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" && $currentDate != $items && $endDate != $items){
+                            $total = $total + 1;
+                            
+                        }
+                        
                     }
+                    $cutiData->jumlah_hari = $total;
+                    
+            }
+        }else{
+            while($currentDate <= $endDate){
+                $dayOfWeek = date('l', strtotime($currentDate));
+                $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
+                if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" ){
+                    $total = $total + 1;
+                    
                 }
-                $cutiData->jumlah_hari = $total;
                 
+            }
+            $cutiData->jumlah_hari = $total;
         }
-        $cutiData->save();
         
-
-        // $lamaKerja = $this->getLamaKerja();
-        // $lamaKerja = (int)$lamaKerja;
-
-        // if($user->jam_kurang > $user->jam_lebih){
-        //     $sisaCuti = $user->sisa_cuti;
-
-        //     $temp = $user->jam_kurang/($lamaKerja*60);
-        //     $temp = (int)$temp;
-
-        //     if($user->jam_kurang%($lamaKerja*60) > 0){
-        //         $temp = $temp + 1;
-        //     }
-
-        //     if($cutiData->jumlah_hari <= $sisaCuti-$temp){
-        //         $cutiData->save();
-        //     }
-
-        // }else{
-        //     $cutiData->save();
-        // }
+        $cutiData->deskripsi = $request->deskripsi;
+        $cutiData->save();
+        if (request()->segment(1)=='api') return response()->json([
+            "error" => false,
+            "message" => 'Tambah cuti berhasil',
+        ]);
         
 
         if (Auth::check())
@@ -121,7 +123,12 @@ class CutiController extends Controller
         // $user->jam_lebih = $user->jam_lebih - ($request->jumlah_jam*60); // Subtract $newValue from the old value
         // $user->save();
 
-        return redirect('/cuti')->with('msg', 'Data berhasil di tambah');
+        return redirect('/cuti')->with('success', 'Data berhasil di tambah');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/cuti')->with('error', 'Data gagal di tambah. Error : ' . $errorMessage);
+        }        
+        
     }
 
 
@@ -132,17 +139,37 @@ class CutiController extends Controller
     }
     public function approval($id, Request $request)
     {
-        //dd($id);
-        $data = Cuti::find($id);
-        $data->status = $request->status;
+        try{
+            $data = Cuti::find($id);
+        $data->status = (int)$request->status;
 
         //1 diterima, 2 ditolak, null belum diproses
         if($request->status == 1){
             $user = User::find($data->users_id);
             $temp = $user->sisa_cuti - $data->jumlah_hari;
             $user->sisa_cuti = $temp;
+
+            $data->update();
             $user->update();
             
+            
+            if (Auth::check())
+                {
+                    date_default_timezone_set("Asia/Jakarta");
+                    $id = Auth::id();
+                    $date = date("Y-m-d h:i:sa");
+                    $data = $user->nama;
+                    $text = 'Melakukan Approval Cuti Pada Karyawan ' . $data;
+                    $logKegiatan = new logKegiatan;
+                    $logKegiatan->users_id = $id;
+                    $logKegiatan->kegiatan = $text;
+                    $logKegiatan->created_at = $date;
+                    $logKegiatan->save();
+                }
+        }else if($request->status == 2){
+            $user = User::find($data->users_id);
+            $data->update();
+
             if (Auth::check())
                 {
                     date_default_timezone_set("Asia/Jakarta");
@@ -158,8 +185,80 @@ class CutiController extends Controller
                 }
         }
 
-        $data->update();
-        return redirect('/cuti')->with('msg', 'data cuti berhasil diperbarui');
+        
+        
+        return redirect('/cuti')->with('success', 'Data cuti berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/cuti')->with('error', 'Data cuti gagal diperbarui');
+        }
+        //dd($id);
+        
+        
+    }
+
+    public function storeMobile(Request $request){
+        try{
+            $user = User::find($request->nama);
+
+
+        $liburNasional = LiburNasional::pluck('tanggal')->toArray();
+        $total = 0;
+        $cutiData = new Cuti;
+        $cutiData->users_id = $request->nama ;
+        $cutiData->tanggal_awal = $request->tanggal_awal;
+        $cutiData->tanggal_akhir = $request->tanggal_akhir;
+        $currentDate = $request->tanggal_awal;
+        $endDate = $request->tanggal_akhir;
+
+
+        if($liburNasional != null){
+
+            foreach($liburNasional as $items){
+                    while($currentDate <= $endDate){
+                        $dayOfWeek = date('l', strtotime($currentDate));
+                        $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
+                        if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" && $currentDate != $items && $endDate != $items){
+                            $total = $total + 1;
+                            
+                        }
+                        
+                    }
+                    $cutiData->jumlah_hari = $total;
+                    
+            }
+
+        }else{
+
+            while($currentDate <= $endDate){
+                $dayOfWeek = date('l', strtotime($currentDate));
+                $currentDate = date('Y-m-d', strtotime($currentDate. '+1 day'));
+                if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" ){
+                    $total = $total + 1;
+                    
+                }
+                
+            }
+            $cutiData->jumlah_hari = $total;
+        }
+
+
+        
+        $cutiData->deskripsi = $request->deskripsi;
+        $cutiData->save();
+
+
+
+
+        if (request()->segment(1)=='api') return response()->json([
+            "error" => false,
+            "message" => 'Tambah cuti berhasil',
+        ]);
+        
+
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+        }        
         
     }
 }

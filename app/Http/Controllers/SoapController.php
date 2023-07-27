@@ -23,6 +23,7 @@ use App\Models\JamKurang;
 use App\Http\Controllers\TADFactory;
 use App\Traits\jamKeInt;
 use App\Models\liburNasional;
+use Exception;
 
 
 class SoapController extends Controller
@@ -47,7 +48,8 @@ class SoapController extends Controller
     }
     public function logAbsenStore(Request $request)
     {
-        // $dotenv = Dotenv\Dotenv::create(_DIR_);
+        try{
+            // $dotenv = Dotenv\Dotenv::create(_DIR_);
         // $dotenv->load();   
         $logger = new Logger('soap-service');
         // Now add some handlers
@@ -72,7 +74,7 @@ class SoapController extends Controller
 
         // $currentDate = getDatetimeNow();
 
-        $yesterday = date('Y-m-d',strtotime("-3 days"));
+        $yesterday = date('Y-m-d',strtotime("-1 days"));
         //$e = 0;
 
         // $yesterday=date('2023-07-11');
@@ -134,7 +136,9 @@ class SoapController extends Controller
                 $totalWaktu = $totaljam.":".$totalmenit;
 
                 $batas = $this->getBatasWaktu();
-                if ($this->timeToInteger($jamAwal) > $this->timeToInteger($batas))  {
+                $lamaBekerja = $this->getLamaKerja();
+                $lamaBekerja = $lamaBekerja * 60;
+                if ($total < $lamaBekerja)  {
                     $statusTerlambat = true;
                 }else{
                     $statusTerlambat = false;
@@ -282,7 +286,12 @@ class SoapController extends Controller
         }
         //$yesterday = date('Y-m-d', strtotime($yesterday . ' - 1 day'));
         
-        return redirect('/log_absen')->with('msg', 'Tambah akun berhasil');
+        return redirect('/log_absen')->with('success', 'Berhasil mengambil data');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/log_absen')->with('success', 'Gagal mengambil data. Error : ' . $errorMessage);
+        }
+        
     }
 
 }

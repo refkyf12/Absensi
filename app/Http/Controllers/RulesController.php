@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Rules;
 use App\Models\logKegiatan;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class RulesController extends Controller
@@ -27,7 +28,8 @@ class RulesController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $data = Rules::find($id);
+        try{
+            $data = Rules::find($id);
         if ($request->value != ""){
             $data->key = $request->key;
             $data->value = $request->value;
@@ -45,9 +47,12 @@ class RulesController extends Controller
                     $logKegiatan->created_at = $date;
                     $logKegiatan->save();
                 }
-            return redirect('/rules')->with('msg', 'Rules berhasil diperbarui');
-        } else {
-            return Redirect::back()->withErrors(['msg' => 'Password harus diisi']);
         }
+        return redirect('/rules')->with('success', 'Rules berhasil diperbarui'); 
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/rules')->with('error', 'Rules gagal diperbarui. Error : ' . $errorMessage);
+        }
+        
     }
 }

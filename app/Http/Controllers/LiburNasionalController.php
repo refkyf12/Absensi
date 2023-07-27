@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\logKegiatan;
+use Exception;
 
 class LiburNasionalController extends Controller
 {
@@ -32,7 +33,8 @@ class LiburNasionalController extends Controller
     }
 
     public function store(Request $request){
-        $libur_nasional = new liburNasional;
+        try{
+            $libur_nasional = new liburNasional;
         $libur_nasional->tanggal = $request->tanggal ;
         $libur_nasional->deskripsi = $request->deskripsi;
         $libur_nasional->save();
@@ -60,6 +62,11 @@ class LiburNasionalController extends Controller
         // $user->save();
 
         return redirect('/libur')->with('msg', 'Data berhasil di tambah');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/libur')->with('msg', 'Data gagal di tambah. Error : ' . $errorMessage);
+        }
+        
     }
 
     /**
@@ -84,7 +91,8 @@ class LiburNasionalController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $data = liburNasional::find($id);
+        try{
+            $data = liburNasional::find($id);
         if ($request->tanggal != ""){
             $data->tanggal = $request->tanggal;
             $data->deskripsi = $request->deskripsi;
@@ -103,8 +111,13 @@ class LiburNasionalController extends Controller
                     $logKegiatan->created_at = $date;
                     $logKegiatan->save();
                 }
-            return redirect('/libur')->with('msg', 'Akun berhasil diperbarui');
             }
+            return redirect('/libur')->with('success', 'Data berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/libur')->with('error', 'Data gagal diperbarui' . $errorMessage);
+        }
+        
     }
     
 }

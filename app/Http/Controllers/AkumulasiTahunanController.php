@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AkumulasiTahunan;
 use Illuminate\Http\Request;
+use Exception;
 
 class AkumulasiTahunanController extends Controller
 {

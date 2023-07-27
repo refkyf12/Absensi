@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('tanggal_awal');
             $table->date('tanggal_akhir');
             $table->integer('jumlah_hari');
+            $table->string('deskripsi')->nullable();
             $table->unsignedBigInteger('status')->nullable();
             $table->timestamps();
         });

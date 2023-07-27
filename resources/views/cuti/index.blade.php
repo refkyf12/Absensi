@@ -5,8 +5,20 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Cuti</h4>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="box box-warning">
             <div class="box-header">
+                
                 <p>
                     <a href="/cuti/create" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Tambah Data</a>
                 </p>
@@ -37,8 +49,11 @@
                                 <th>Tanggal Awal</th>
                                 <th>Tanggal Akhir</th>
                                 <th>Lama Cuti (hari) </th>
+                                <th>Deskripsi</th>
                                 <th>Approval</th>
-                                <th>Aksi</th>
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
+                                <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -54,6 +69,7 @@
                                 <td>{{ $dt->tanggal_awal }}</td>
                                 <td>{{ $dt->tanggal_akhir }}</td>
                                 <td>{{ $dt->jumlah_hari }}</td>
+                                <td>{{ $dt->deskripsi }}</td>
                                 @if($dt->status == 1)
                                         <td>DISETUJUI</td>
                                     @endif
@@ -63,12 +79,15 @@
                                     @if($dt->status == null)
                                         <td>BELUM DI PROSES</td>
                                     @endif
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                                 <td>
+                                    
                                 <div style="width:90px">
                                             <a href="/cuti/status/{{$dt->id}}" class="btn btn-warning btn-xs btn-edit"
                                                 id="edit"><i class="fa fa-check"></i></a>
                                         </div>
                                 </td>
+                                @endif
 
 
                             </tr>

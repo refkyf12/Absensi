@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\lebihKerja;
 use Illuminate\Http\Request;
+use Exception;
 
 class LebihKerjaController extends Controller
 {

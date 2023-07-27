@@ -16,6 +16,7 @@ class Cuti extends Model
         'tanggal_awal',
         'tanggal_akhir',
         'jumlah_hari',
+        'deskripsi',
         'status',
     ];
 

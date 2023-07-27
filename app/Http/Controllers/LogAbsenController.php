@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JamKurang;
+use App\Models\lebihKerja;
 use App\Models\Lembur;
 use App\Models\logAbsen;
 use App\Models\User;
@@ -12,6 +14,8 @@ use App\Imports\LogAbsenImport;
 use Session;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class LogAbsenController extends Controller
 {
@@ -36,6 +40,11 @@ class LogAbsenController extends Controller
     {
         $this->validate();
         $log_absen = logAbsen::all();
+        if(request()-> segment(1) =='api') return response()->json([
+            "error"=> false,
+            "list" => $log_absen,
+        ]);
+        
 		return view('log_absen.LogAbsen',['data'=>$log_absen]);
     }
 
@@ -68,13 +77,30 @@ class LogAbsenController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $data = LogAbsen::find($id);
+        try{
+            $data = LogAbsen::find($id);
         $dataLembur = Lembur::where('users_id', $data->users_id)
                             ->where('tanggal', $data->tanggal)
                             ->first(); 
         $user = User::find($data->users_id);
         $batasWaktu = $this->getBatasKerja();
         $batasWaktu = $this->timeToInteger($batasWaktu)/60;
+
+
+        $KurangOrLebih = lebihKerja::where('absen_id', $data->id)
+            ->first();
+
+        if($KurangOrLebih){
+            $KurangOrLebih->delete();
+        }
+
+        $KurangOrLebih = JamKurang::where('absen_id', $data->id)
+            ->first();
+
+
+        if($KurangOrLebih){
+            $KurangOrLebih->delete();
+        }
 
         if($dataLembur != null){
             if($dataLembur->status == 1 && $dataLembur->status_kerja == 1){
@@ -107,6 +133,7 @@ class LogAbsenController extends Controller
                     $data->jam_masuk = $request->jam_masuk;
                     $data->jam_keluar = $request->jam_keluar;
                     $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+                    $temp2 = $temp;
 
                     $totalJamLebih = $temp/60;
                     $totalJamLebih = (int)$totalJamLebih;
@@ -125,7 +152,10 @@ class LogAbsenController extends Controller
 
                     $data->total_jam = $temp;
 
-                    if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
+                    $lamaKerja = $this->getLamaKerja();
+                    $lamaKerja = $lamaKerja * 60;
+
+                    if($temp2 < $lamaKerja){
                         $data->keterlambatan = 1;
                     }else{
                         $data->keterlambatan = 0;
@@ -210,6 +240,7 @@ class LogAbsenController extends Controller
                     $data->jam_masuk = $request->jam_masuk;
                     $data->jam_keluar = $request->jam_keluar;
                     $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+                    $temp2 = $temp;
 
                     $totalJamLebih = $temp/60;
                     $totalJamLebih = (int)$totalJamLebih;
@@ -228,7 +259,10 @@ class LogAbsenController extends Controller
 
                     $data->total_jam = $temp;
 
-                    if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
+                    $lamaKerja = $this->getLamaKerja();
+                    $lamaKerja = $lamaKerja * 60;
+
+                    if($temp2 < $lamaKerja){
                         $data->keterlambatan = 1;
                     }else{
                         $data->keterlambatan = 0;
@@ -286,6 +320,7 @@ class LogAbsenController extends Controller
                 $data->jam_masuk = $request->jam_masuk;
                 $data->jam_keluar = $request->jam_keluar;
                 $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+                $temp2 = $temp;
 
                 $totalJamLebih = $temp/60;
                 $totalJamLebih = (int)$totalJamLebih;
@@ -304,7 +339,10 @@ class LogAbsenController extends Controller
 
                 $data->total_jam = $temp;
 
-                if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
+                $lamaKerja = $this->getLamaKerja();
+                $lamaKerja = $lamaKerja * 60;
+
+                if($temp2 < $lamaKerja){
                     $data->keterlambatan = 1;
                 }else{
                     $data->keterlambatan = 0;
@@ -317,6 +355,7 @@ class LogAbsenController extends Controller
             $data->jam_masuk = $request->jam_masuk;
             $data->jam_keluar = $request->jam_keluar;
             $temp = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+            $temp2 = $temp;
 
                 $totalJamLebih = $temp/60;
                 $totalJamLebih = (int)$totalJamLebih;
@@ -335,11 +374,14 @@ class LogAbsenController extends Controller
 
                 $data->total_jam = $temp;
 
-            if(($this->timeToInteger($data->jam_masuk)/60) > $batasWaktu){
-                $data->keterlambatan = 1;
-            }else{
-                $data->keterlambatan = 0;
-            }
+                $lamaKerja = $this->getLamaKerja();
+                $lamaKerja = $lamaKerja * 60;
+
+                if($temp2 < $lamaKerja){
+                    $data->keterlambatan = 1;
+                }else{
+                    $data->keterlambatan = 0;
+                }
 
             $data->deskripsi = $request->deskripsi;
         }
@@ -347,7 +389,67 @@ class LogAbsenController extends Controller
         $data->update();
         $user->update();
 
-        return redirect('/log_absen')->with('msg', 'Log Absen berhasil di edit');
+        $lebihOrKurang = ($this->timeToInteger($data->jam_keluar) - $this->timeToInteger($data->jam_masuk))/60;
+
+        if($lebihOrKurang >= $this->getLamaKerja()*60){
+            $totalLebih = $lebihOrKurang + ((int)$this->getLamaKerja())*60;
+    
+                    $totalJamForLebih = $totalLebih;
+                
+                    $totalJamForLebih = $totalLebih/60;
+                    $totalJamForLebih = (int)$totalJamForLebih;
+                
+                    $totalMenitLebih = $totalLebih%60;
+                
+                    if ($totalJamForLebih / 10 < 1){
+                        $totalJamForLebih = "0".$totalJamForLebih;
+                    }
+                
+                    if ($totalMenitLebih / 10 < 1){
+                        $totalMenitLebih = "0".$totalMenitLebih;
+                    }
+                
+                    $totalKurang = $totalJamForLebih.":".$totalMenitLebih;
+    
+                    lebihKerja::create([
+                        'users_id' => $data->users_id,
+                        'absen_id' => $data->id,
+                        'total_jam' => $totalKurang,
+                    ]);
+
+        }else{
+            $totalKurang = ((int)$this->getLamaKerja())*60 - $lebihOrKurang;
+    
+                    $totalJamForKurang = $totalKurang;
+                
+                    $totalJamForKurang = $totalKurang/60;
+                    $totalJamForKurang = (int)$totalJamForKurang;
+                
+                    $totalMenitKurang = $totalKurang%60;
+                
+                    if ($totalJamForKurang / 10 < 1){
+                        $totalJamForKurang = "0".$totalJamForKurang;
+                    }
+                
+                    if ($totalMenitKurang / 10 < 1){
+                        $totalMenitKurang = "0".$totalMenitKurang;
+                    }
+                
+                    $totalKurang = $totalJamForKurang.":".$totalMenitKurang;
+    
+                    JamKurang::create([
+                        'users_id' => $data->users_id,
+                        'absen_id' => $data->id,
+                        'total_jam_kurang' => $totalKurang,
+                    ]);
+        }
+
+        return redirect('/log_absen')->with('success', 'Data berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/log_absen')->with('error', 'Data gagal diperbarui' . $errorMessage);
+        }
+        
     }
 
     /**
@@ -368,7 +470,8 @@ class LogAbsenController extends Controller
 
     public function import_excel(Request $request) 
 	{
-		// validasi
+        try{
+            // validasi
 		$this->validate($request, [
 			'file' => 'required|mimes:csv,xls,xlsx'
 		]);
@@ -394,7 +497,12 @@ class LogAbsenController extends Controller
 		Session::flash('sukses','Data Absen Berhasil Diimport!');
  
 		// alihkan halaman kembali
-		return redirect('/log_absen');
+		return redirect('/log_absen')->with('success', 'Import data berhasil');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/log_absen')->with('error', 'Import data gagal. Error : ' . $errorMessage);
+        }
+		
 	}
 
     public function filter(Request $request){
@@ -451,6 +559,20 @@ class LogAbsenController extends Controller
         //dd($data);
 
         return view('log_absen.form_edit_LogAbsen', compact('data'));
+    }
+
+    public function getLogAbsen()
+    {
+        // // Mendapatkan user yang sedang login
+        // $user = Auth::user();
+
+        // // Mendapatkan data absen untuk user yang sedang login
+        // $logAbsen = LogAbsen::where('users_id', $user->id)->get();
+        $logAbsen = logAbsen::all();
+        if(request()-> segment(1) =='api') return response()->json([
+            "error"=> false,
+            "list" => $logAbsen,
+        ]);
     }
 
 }

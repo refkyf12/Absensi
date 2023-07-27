@@ -34,6 +34,17 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
+  @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
     <p class="login-box-msg">Masuk untuk memulai</p>
  
     <form class="form-horizontal" method="POST" action="/authenticate">

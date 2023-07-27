@@ -19,6 +19,7 @@ use App\Models\JamKurang;
 use App\Models\Role;
 use App\Models\lebihKerja;
 use App\Models\AkumulasiTahunan;
+use Exception;
 
 
 class UserController extends Controller
@@ -43,22 +44,62 @@ class UserController extends Controller
         return $this->id;
     }
 
+    public function authUser(Request $request)
+    {
+        //set validation
+        $validator = Validator::make($request->all(), [
+            'email'     => 'required',
+            'password'  => 'required'
+        ]);
+
+        //if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        //get credentials from request
+        $credentials = $request->only('email', 'password');
+
+        //if auth failed
+        if(!$token = auth()->attempt($credentials)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email atau Password Anda salah'
+            ], 401);
+        }
+
+        //if auth success
+        return response()->json([
+            'success' => true,
+            'user'    => auth()->user(),    
+            'token'   => $token   
+        ], 200);
+    }
+
+
+
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-   
-        if (Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password
-            ])){
-                session()->put('nama', Auth::user()->name);
-                return redirect('/log_absen');
-        } else {
-            return redirect('/login')->with('msg', 'Email/Password salah');   
+        try{
+            $request->validate([
+                'email' => 'required',
+                'password' => 'required',
+            ]);
+
+            if (Auth::attempt([
+                'email' => $request->email,
+                'password' => $request->password
+                ])){
+                    session()->put('nama', Auth::user()->name);
+                    return redirect('/log_absen');
+            } else {
+                return redirect('/login')->with('error', 'Email/Password salah');   
+            }
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/login')->with('error', 'Gagal login. Error : ' . $errorMessage); 
         }
+        
     }
 
     public function dashboard()
@@ -71,10 +112,16 @@ class UserController extends Controller
     }
     
     public function logout() {
-        \Session::flush();
-        Auth::logout();
+        try{
+            \Session::flush();
+            Auth::logout();
   
-        return Redirect('login');
+            return redirect('/login')->with('success', 'Berhasil logout');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/login')->with('error', 'Gagal logout. Error : ' . $errorMessage);
+        }
+        
     }
 
     public function index()
@@ -105,29 +152,34 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $karyawan = new User;
-        $karyawan->id = $request->users_id;
-        $karyawan->nama = $request->nama;
-        $karyawan->email = $request->email;
-        $pass_crypt = bcrypt($request->password);
-        $karyawan->role_id = $request->role_id;
-        $karyawan->password = $pass_crypt;
-
-        $karyawan->save();
-        if (Auth::check())
-                {
-                    date_default_timezone_set("Asia/Jakarta");
-                    $id = Auth::id();
-                    $date = date("Y-m-d h:i:sa");
-                    $data = $request->nama;
-                    $text = 'Melakukan Tambah Karyawan ' . $data;
-                    $logKegiatan = new logKegiatan;
-                    $logKegiatan->users_id = $id;
-                    $logKegiatan->kegiatan = $text;
-                    $logKegiatan->created_at = $date;
-                    $logKegiatan->save();
-                }
-        return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
+        try{
+            $karyawan = new User;
+            $karyawan->id = $request->users_id;
+            $karyawan->nama = $request->nama;
+            $karyawan->email = $request->email;
+            $pass_crypt = bcrypt($request->password);
+            $karyawan->role_id = $request->role_id;
+            $karyawan->password = $pass_crypt;
+    
+            $karyawan->save();
+            if (Auth::check())
+                    {
+                        date_default_timezone_set("Asia/Jakarta");
+                        $id = Auth::id();
+                        $date = date("Y-m-d h:i:sa");
+                        $data = $request->nama;
+                        $text = 'Melakukan Tambah Karyawan ' . $data;
+                        $logKegiatan = new logKegiatan;
+                        $logKegiatan->users_id = $id;
+                        $logKegiatan->kegiatan = $text;
+                        $logKegiatan->created_at = $date;
+                        $logKegiatan->save();
+                    }
+            return redirect('/karyawan')->with('success', 'Tambah data berhasil');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/karyawan')->with('error', 'Tambah data gagal' . $errorMessage);
+        }
 
         
     }
@@ -157,7 +209,8 @@ class UserController extends Controller
      */
     public function update(Request $request, int $users_id)
     {
-        $data = User::find($users_id);
+        try{
+            $data = User::find($users_id);
         $lebihKerja = lebihKerja::find($users_id);
         $cuti = Cuti::find($users_id);
         if ($request->password != ""){
@@ -166,9 +219,11 @@ class UserController extends Controller
             $data->email = $request->email;
             $pass_crypt = bcrypt($request->password);
             $data->password = $pass_crypt;
-            $data->role_id = $request->role;
+            $data->role_id = $request->role_id;
             // $lebihKerja->update();
             $data->update();
+
+            
 
             if (Auth::check())
                 {
@@ -183,11 +238,13 @@ class UserController extends Controller
                     $logKegiatan->created_at = $date;
                     $logKegiatan->save();
                 }
-            return redirect('/karyawan')->with('msg', 'Akun berhasil diperbarui');
-        } else {
-            $users_id = optional(Auth::user())->users_id;
-            return Redirect::back()->withErrors(['msg' => 'Password harus diisi']);
+            }
+        return redirect('/karyawan')->with('success', 'Data berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/karyawan')->with('error', 'Data gagal diperbarui. Error : ' . $errorMessage);
         }
+        
 
         
     }
@@ -204,7 +261,8 @@ class UserController extends Controller
 
     public function lemburKeCuti($users_id)
     {
-        $data = User::find($users_id);
+        try{
+            $data = User::find($users_id);
         
         if($data->jam_lembur >= ((int)$this->getLamaKerja())*60){
             $temp = $data->jam_lembur / ((int)$this->getLamaKerja())*60;
@@ -217,23 +275,34 @@ class UserController extends Controller
 
         }
 
-        return redirect('/karyawan')->with('msg', 'Data Berhasil di Hapus');
+        return redirect('/karyawan')->with('msg', 'Data berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/karyawan')->with('msg', 'Data gagal diperbarui. Error : ' . $errorMessage);
+        }
+        
     }
 
     public function lebihKurangLembur($id)
     {
-        $user = User::find($id);
+        try{
+            $user = User::find($id);
         $user->jam_lebih = $user->jam_lebih -  ($user->jam_lembur*60);
         $user->jam_lembur = null;
         $user->save();
 
-        return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
+        return redirect('/karyawan')->with('msg', 'Tambah data berhasil');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/karyawan')->with('msg', 'Tambah data gagal. Error : ' . $errorMessage);
+        }
+        
     }
 
     public function reset()
     {
-
-        $users = User::all();
+        try{
+            $users = User::all();
         date_default_timezone_set('Asia/Jakarta');
         $date = date('Y-m-d H:i:s');
 
@@ -287,6 +356,33 @@ class UserController extends Controller
                     $logKegiatan->save();
                 }
         
-        return redirect('/karyawan')->with('msg', 'Tambah akun berhasil');
+        return redirect('/karyawan')->with('success', 'Reset berhasil');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/karyawan')->with('error', 'Reset gagal. Error : ' . $errorMessage);
+        }
+        
+    }
+
+    public function jamKurangMinusCuti($users_id){
+        try{
+            $user = User::find($users_id);
+
+        $temp = $user->jam_kurang - $user->jam_lebih;
+        $temp2 = $this->getLamaKerja();
+        $temp2 = $temp2 * 60;
+
+        if($user->jam_kurang > $user->jam_lebih && $temp >= $temp2){
+            $user->jam_kurang = $user->jam_kurang - $temp2;
+            $user->sisa_cuti = $user->sisa_cuti - 1;
+
+            $user->update();
+        }
+        return redirect('/karyawan')->with('success', 'Tambah data berhasil');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/karyawan')->with('error', 'Tambah data gagal');
+        }
+        
     }
 }

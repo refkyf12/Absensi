@@ -9,6 +9,7 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
 
+use Exception;
 use App\lib\TAD;
 use App\Http\Controllers\_DIR_;
 use App\Models\User;
@@ -30,7 +31,8 @@ class AbsenNonKerjaController extends Controller
 
     public function logAbsenNonKerja(Request $request)
     {
-        $logger = new Logger('soap-service');
+        try{
+            $logger = new Logger('soap-service');
         $tad = (new TADFactory((['ip'=> '10.50.0.60', 'com_key'=>0])))->get_instance();
         echo 'starting read data in machine finger print ..'. getenv('IP_MESIN_ABSEN') . "<br/>";
         $logs = $tad->get_att_log();
@@ -106,11 +108,21 @@ class AbsenNonKerjaController extends Controller
                 $logAbsen->save();
             }
         }
-        return redirect('/absen_non_kerja')->with('msg', 'Tambah akun berhasil');
+        return redirect('/absen_non_kerja')->with('success', 'Berhasil mengambil data');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/absen_non_kerja')->with('error', 'Gagal mengambil data. Error : ' . $errorMessage );
+        }
+        
+        
     }
     public function index()
     {
         $log_absen = absenNonKerja::all();
+        if(request()-> segment(1) =='api') return response()->json([
+            "error"=> false,
+            "list" => $log_absen,
+        ]);
 		return view('logAbsenNonKerja.index',['data'=>$log_absen]);
     }
 

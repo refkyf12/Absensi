@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\logKegiatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class RoleController extends Controller
 {
@@ -36,7 +37,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = new Role;
+        try{
+            $role = new Role;
         $role->id = $request->id;
         $role->nama_role = $request->nama_role;
         $role->sisa_cuti = $request->sisa_cuti;
@@ -54,7 +56,12 @@ class RoleController extends Controller
                     $logKegiatan->created_at = $date;
                     $logKegiatan->save();
                 }
-        return redirect('/role')->with('msg', 'Tambah akun berhasil');
+        return redirect('/role')->with('success', 'Tambah data berhasil');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/role')->with('error', 'Tambah data gagal. Error : ' . $errorMessage);
+        }
+        
     }
 
     /**
@@ -79,7 +86,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, int $role)
     {
-        $data = Role::find($role);
+        try{
+            $data = Role::find($role);
         if ($request->id != ""){
             $data->id = $request->id;
             $data->nama_role = $request->nama_role;
@@ -98,10 +106,13 @@ class RoleController extends Controller
                     $logKegiatan->save();
                 }
             $data->update();
-
-            
-            return redirect('/role')->with('msg', 'Akun berhasil diperbarui');
             }
+            return redirect('/role')->with('success', 'Data berhasil diperbarui');
+        }catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return redirect('/role')->with('error', 'Data gagal diperbarui. Error : ' . $errorMessage);
+        }
+        
     }
 
     /**

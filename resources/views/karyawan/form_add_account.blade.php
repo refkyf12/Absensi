@@ -22,7 +22,7 @@
                     @csrf
                     <input type="hidden" name="_method" value="{{ $method }}" />
                     <div class="form-group">
-                        <label>NIP</label>
+                        <label>ID</label>
                         <input
                             type="string"
                             name="users_id"
@@ -65,7 +65,8 @@
                         <option value=0>Karyawan</option>
                         <option value=1>Admin</option>
                         <option value=2>Project Manager</option>
-                        <option value=2>HR</option>
+                        <option value=3>HR</option>
+                        <option value=4>Administrasi</option>
                         </select>
                     </div>
                     <div style="text-align: center">

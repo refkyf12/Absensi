@@ -20,7 +20,7 @@
                                 <th>Jam Masuk</th>
                                 <th>Jam Keluar</th>
                                 <th>Total Kerja (1 Hari)</th>
-                                <th>Keterlambatan</th>
+                                <th>Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,10 +37,10 @@
                                 <td>{{$dt->jam_keluar}}</td>
                                 <td>{{$dt->total_jam}}</td>
                                 @if($dt->keterlambatan == true)
-                                <td>Terlambat</td>
+                                <td>Jam Kerja Tidak Terpenuhi</td>
                                 @endif
                                 @if($dt->keterlambatan == false)
-                                <td>Tepat Waktu</td>
+                                <td>Jam Kerja Terpenuhi</td>
                                 @endif
                             </tr>
                             @endforeach

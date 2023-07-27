@@ -5,6 +5,17 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Log Absen</h4>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         {{-- notifikasi form validasi --}}
         @if ($errors->has('file'))
         <span class="invalid-feedback" role="alert">
@@ -21,7 +32,7 @@
         @endif
         <div class="box box-warning">
             <div class="box-header">
-                <form
+                <!-- <form
                     class="border"
                     style="padding: 20px"
                     method="POST"
@@ -31,31 +42,45 @@
                 <div style="text-align: center">
                         <button class="btn btn-success">Tambah Data Log absen</button>
                     </div>
-                </form>
-                <div class="modal-dialog" role="document">
-                    <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
-                        <div class="modal-content">
+                </form> -->
+                <div class="box-body">
+                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
+                <form method="post" action="/log_absen/import_excel" enctype="multipart/form-data">
+                        <button id="showModalBtn" class="btn btn-primary">Import Data</button>
+                    <div class="modal-dialog" role="document">
+                        
+
+                        <div class="modal-content" id="modalContent" hidden>
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Import Excel</h5>
                             </div>
                             <div class="modal-body">
-
-                                {{ csrf_field() }}
-
-                                <label>Pilih file excel</label>
-                                <div class="form-group">
-                                    <input type="file" name="file" required="required">
-                                </div>
-
+                                <form action="your_form_action_url_here" method="post" enctype="multipart/form-data">
+                                    {{ csrf_field() }}
+                                    <label>Pilih file excel</label>
+                                    <div class="form-group">
+                                        <input type="file" name="file" required="required">
+                                    </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Import</button>
                             </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-                <div class="box-body">
+                        @endif
+
+                        <script>
+                            document.getElementById("showModalBtn").addEventListener("click", function() {
+                                document.getElementById("modalContent").removeAttribute("hidden");
+                            });
+                        </script>
+
+                        </form>
+                    </div>
+                <!-- </div>
+
+                <div class="box-body"> -->
                     <form method="GET" action="/filter">
                         <div class="form-group">
                             <label for="tanggal-filter-start">Tanggal Awal:</label>
@@ -85,9 +110,11 @@
                                 <th>Jam Masuk</th>
                                 <th>Jam Keluar</th>
                                 <th>Total Jam Kerja</th>
-                                <th>Keterlambatan</th>
+                                <th>Keterangan</th>
                                 <th>Deskripsi</th>
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                                 <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -106,13 +133,13 @@
                                     {{$dt->total_jam}}
                                 </td>
                                 @if($dt->keterlambatan == true)
-                                <td>Terlambat</td>
+                                <td>Jam Kerja Tidak Terpenuhi</td>
                                 @endif
                                 @if($dt->keterlambatan == false)
-                                <td>Tepat Waktu</td>
+                                <td>Jam Kerja Terpenuhi</td>
                                 @endif
                                 <td>{{$dt->deskripsi}}</td>
-
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                                 <td>
                                         
                                         <div style="width:90px">
@@ -120,6 +147,7 @@
                                                 id="edit"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

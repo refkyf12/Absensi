@@ -5,8 +5,20 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Log Absen Non Kerja</h4>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="box box-warning">
             <div class="box-header">
+            @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id == 2 || \Auth::user()->role_id == 3)
                 <form
                     class="border"
                     style="padding: 20px"
@@ -18,6 +30,7 @@
                         <button class="btn btn-success">Tambah Data Log Absen (Non Hari Kerja)</button>
                     </div>
                 </form>
+            @endif
                 <div class="box-body">
                     <form method="GET" action="/filter">
                         <div class="form-group">

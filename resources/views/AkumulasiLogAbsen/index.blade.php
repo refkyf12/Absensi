@@ -5,6 +5,17 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Akumulasi Absen</h4>
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="box box-warning">
             <div class="box-header">
                 <div class="box-body">
@@ -33,7 +44,7 @@
                                 <th>Tanggal Awal</th>
                                 <th>Tanggal Akhir</th>
                                 <th>Total Jam Kerja</th>
-                                <th>Keterlambatan</th>
+                                <!-- <th>Keterlambatan</th> -->
                                 <th>Detail</th>
                             </tr>
                         </thead>
@@ -47,15 +58,15 @@
                                 <td>{{request('tanggal_mulai')}}</td>
                                 <td>{{request('tanggal_akhir')}}</td>
                                 <td>{{$dt->total_kerja}}</td>
-                                <td>{{$dt->total_keterlambatan}}</td>
+                                <!-- <td>{{$dt->total_keterlambatan}}</td> -->
                                 <td>
-                                <td>
-                                <form class="border"
-                                method="GET"
-                                action="/akumulasi/detail/{{$dt->users_id}}">
-                                    <button type="submit">Lihat Detail</button>
-                                </form>
-                                </td>
+                                <!-- <td> -->
+                                    <form class="border"
+                                    method="GET"
+                                    action="/akumulasi/detail/{{$dt->users_id}}">
+                                        <button type="submit">Lihat Detail</button>
+                                    </form>
+                                <!-- </td> -->
                             </tr>
                             @endforeach
                         </tbody>
